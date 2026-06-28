@@ -1,0 +1,11 @@
+@import "tailwindcss";
+
+/* Memberitahu Tailwind untuk mencari class di dalam file Blade */
+@source "../../resources/views";
+
+/* Pengaturan warna dan font khusus HPI Malang */
+@theme {
+  --color-hpi-green: #044C3F;
+  --color-hpi-light: #F8F9FA;
+  --font-sans: "Plus Jakarta Sans", sans-serif;
+}
