@@ -14,6 +14,9 @@ export default {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
+            colors: {
+                'hpi-green': '#044C3F', // Setara hijau yang diminta
+            }
         },
     },
 

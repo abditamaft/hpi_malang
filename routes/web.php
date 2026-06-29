@@ -30,22 +30,23 @@ Route::get('/hubungi-kami', function () {
     return view('kontak'); 
 });
 
+// ==========================================
+// 2. RUTE ADMIN (WAJIB LOGIN)
+// ==========================================
+Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
 
-// ==========================================
-// 2. RUTE ADMIN CMS (KHUSUS ADMIN LOGIN)
-// ==========================================
-Route::middleware(['auth'])->prefix('admin')->group(function () {
-    
-    // Halaman Dashboard Admin
+    // Root redirect ke dashboard
+    Route::get('/', fn() => redirect()->route('admin.dashboard'));
+
+    // Dashboard
     Route::get('/dashboard', function () {
         return view('admin.dashboard');
-    })->name('admin.dashboard');
+    })->name('dashboard');
 
-    // Nanti rute CRUD lainnya (seperti pramuwisata, berita, dll) ditambahkan di dalam sini...
+    // Destinasi Wisata
+    Route::resource('destinasi', \App\Http\Controllers\Admin\DestinasiController::class);
+
+    // Kategori Destinasi
+    Route::resource('kategori-destinasi', \App\Http\Controllers\Admin\KategoriDestinasiController::class)
+         ->parameters(['kategori-destinasi' => 'kategori_id']);
 });
-
-
-// ==========================================
-// 3. RUTE AUTENTIKASI BREEZE (LOGIN/LOGOUT)
-// ==========================================
-require __DIR__.'/auth.php';

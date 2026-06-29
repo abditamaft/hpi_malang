@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Admin Dashboard') - HPI Malang</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <!-- Alpine.js untuk interaksi dropdown jika diperlukan nanti -->
@@ -40,10 +41,11 @@
             <div>
                 <h3 class="px-4 text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Manajemen Konten</h3>
                 <div class="space-y-1">
-                    <a href="/admin/pramuwisata" class="block py-2 px-4 rounded-lg hover:bg-slate-800 hover:text-white transition">Direktori Pramuwisata</a>
-                    <a href="/admin/destinasi" class="block py-2 px-4 rounded-lg hover:bg-slate-800 hover:text-white transition">Destinasi Wisata</a>
-                    <a href="/admin/layanan" class="block py-2 px-4 rounded-lg hover:bg-slate-800 hover:text-white transition">Layanan Pemanduan</a>
-                    <a href="/admin/berita" class="block py-2 px-4 rounded-lg hover:bg-slate-800 hover:text-white transition">Berita & Kegiatan</a>
+                    <a href="/admin/pramuwisata" class="block py-2 px-4 rounded-lg {{ request()->is('admin/pramuwisata*') ? 'bg-emerald-600/20 text-emerald-400 font-semibold' : 'hover:bg-slate-800 hover:text-white' }} transition">Direktori Pramuwisata</a>
+                    <a href="{{ route('admin.destinasi.index') }}" class="block py-2 px-4 rounded-lg {{ request()->routeIs('admin.destinasi*') ? 'bg-emerald-600/20 text-emerald-400 font-semibold' : 'hover:bg-slate-800 hover:text-white' }} transition">Destinasi Wisata</a>
+                    <a href="{{ route('admin.kategori-destinasi.index') }}" class="block py-2 px-4 rounded-lg {{ request()->routeIs('admin.kategori-destinasi*') ? 'bg-emerald-600/20 text-emerald-400 font-semibold' : 'hover:bg-slate-800 hover:text-white' }} transition">Kategori Destinasi</a>
+                    <a href="/admin/layanan" class="block py-2 px-4 rounded-lg {{ request()->is('admin/layanan*') ? 'bg-emerald-600/20 text-emerald-400 font-semibold' : 'hover:bg-slate-800 hover:text-white' }} transition">Layanan Pemanduan</a>
+                    <a href="/admin/berita" class="block py-2 px-4 rounded-lg {{ request()->is('admin/berita*') ? 'bg-emerald-600/20 text-emerald-400 font-semibold' : 'hover:bg-slate-800 hover:text-white' }} transition">Berita &amp; Kegiatan</a>
                 </div>
             </div>
 

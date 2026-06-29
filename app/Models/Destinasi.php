@@ -6,7 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Destinasi extends Model
 {
-    // Beri tahu Laravel nama tabel aslinya
     protected $table = 'destinasi';
     protected $guarded = [];
+
+    const CREATED_AT = 'dibuat_pada';
+    const UPDATED_AT = 'diperbarui_pada';
+
+    protected $casts = [
+        'is_unggulan' => 'boolean',
+    ];
 }

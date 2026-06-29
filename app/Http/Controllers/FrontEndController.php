@@ -26,9 +26,31 @@ class FrontEndController extends Controller
     /**
      * Menampilkan Halaman Destinasi
      */
-    public function destinasi()
+    public function destinasi(\Illuminate\Http\Request $request)
     {
-        return view('destinasi');
+        $aktifKategori = $request->query('kategori', '');
+
+        // Ambil semua kategori unik (kecuali placeholder) untuk tombol filter
+        $kategori = \Illuminate\Support\Facades\DB::table('destinasi')
+            ->select('kategori_id', 'kategori_en')
+            ->distinct()
+            ->where('nama_destinasi_id', '!=', '__kategori_placeholder__')
+            ->orderBy('kategori_id')
+            ->get()
+            ->unique('kategori_id')
+            ->values();
+
+        // Query destinasi (kecualikan placeholder) + filter kategori jika ada
+        $query = \App\Models\Destinasi::where('nama_destinasi_id', '!=', '__kategori_placeholder__');
+        if ($aktifKategori) {
+            $query->where('kategori_id', $aktifKategori);
+        }
+
+        $unggulan  = (clone $query)->where('is_unggulan', true)->orderBy('dibuat_pada', 'desc')->get();
+        $biasa     = (clone $query)->where('is_unggulan', false)->orderBy('dibuat_pada', 'desc')->get();
+        $destinasi = $unggulan->merge($biasa);
+
+        return view('destinasi', compact('destinasi', 'unggulan', 'biasa', 'kategori', 'aktifKategori'));
     }
 
     /**
