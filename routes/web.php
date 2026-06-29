@@ -10,16 +10,15 @@ use App\Http\Controllers\FrontEndController;
 |--------------------------------------------------------------------------
 */
 
-// 1. Route untuk fitur Ganti Bahasa (Dwi-Bahasa)
+// ==========================================
+// 1. RUTE FRONTEND (UNTUK PENGUNJUNG UMUM)
+// ==========================================
 Route::get('lang/{lang}', [LanguageController::class, 'switchLang'])->name('lang.switch');
 
-// 2. Route Halaman Utama (Beranda) mengarah ke fungsi index()
-Route::get('/', [FrontEndController::class, 'index']);
+// Ini yang memanggil Beranda HPI (Bukan halaman Laravel default)
+Route::get('/', [FrontEndController::class, 'index']); 
 
-// 3. Route memproses Form Ulasan mengarah ke fungsi store()
 Route::post('/kirim-ulasan', [FrontEndController::class, 'store'])->name('ulasan.store');
-
-// 4. Route Halaman Lainnya (diarahkan ke controller)
 Route::get('/tentang', [FrontEndController::class, 'tentang']);
 Route::get('/destinasi', [FrontEndController::class, 'destinasi']);
 
@@ -30,3 +29,23 @@ Route::get('/direktori', function () {
 Route::get('/hubungi-kami', function () {
     return view('kontak'); 
 });
+
+
+// ==========================================
+// 2. RUTE ADMIN CMS (KHUSUS ADMIN LOGIN)
+// ==========================================
+Route::middleware(['auth'])->prefix('admin')->group(function () {
+    
+    // Halaman Dashboard Admin
+    Route::get('/dashboard', function () {
+        return view('admin.dashboard');
+    })->name('admin.dashboard');
+
+    // Nanti rute CRUD lainnya (seperti pramuwisata, berita, dll) ditambahkan di dalam sini...
+});
+
+
+// ==========================================
+// 3. RUTE AUTENTIKASI BREEZE (LOGIN/LOGOUT)
+// ==========================================
+require __DIR__.'/auth.php';
