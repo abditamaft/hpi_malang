@@ -1,0 +1,129 @@
+@extends('layouts.admin')
+
+@section('title', 'Web Settings & Hero')
+
+@section('content')
+<div class="max-w-5xl mx-auto">
+
+    <!-- Alert Sukses -->
+    @if(session('success'))
+    <div class="mb-6 bg-emerald-50 border border-emerald-200 text-emerald-700 px-4 py-3 rounded-xl flex items-center gap-3">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+        <span class="font-medium">{{ session('success') }}</span>
+    </div>
+    @endif
+
+    @if ($errors->any())
+    <div class="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-4 rounded-xl">
+        <strong class="font-bold flex items-center gap-2 mb-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            Gagal Menyimpan Data!
+        </strong>
+        <ul class="list-disc ml-6 text-sm space-y-1">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+    @endif
+
+    <form action="{{ route('admin.settings.update') }}" method="POST" enctype="multipart/form-data" class="space-y-8">
+        @csrf
+        @method('PUT')
+
+        <!-- SECTION 1: HERO GAMBAR & JUDUL -->
+        <div class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-gray-100">
+            <h2 class="text-lg font-bold text-gray-800 mb-6 flex items-center gap-2">
+                <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                1. Pengaturan Hero Banner
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Kolom Upload Gambar -->
+                <div class="col-span-1">
+                    <label class="block text-sm font-bold text-gray-700 mb-2">Gambar Latar Hero</label>
+                    @if($settings->hero_gambar)
+                        <img src="{{ asset('storage/' . $settings->hero_gambar) }}" class="w-full h-32 object-cover rounded-xl mb-3 border border-gray-200 shadow-sm">
+                    @else
+                        <div class="w-full h-32 bg-gray-100 rounded-xl mb-3 border border-gray-200 border-dashed flex items-center justify-center text-gray-400 text-sm">
+                            Belum ada gambar
+                        </div>
+                    @endif
+                    <input type="file" name="hero_gambar" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 cursor-pointer">
+                    <p class="text-xs text-gray-400 mt-2">Format: JPG, PNG, WEBP. Maks 2MB. Rekomendasi: 1920x1080px.</p>
+                </div>
+
+                <!-- Kolom Input Teks Hero -->
+                <div class="col-span-1 md:col-span-2 space-y-4">
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-2">Judul Hero (Bahasa Indonesia)</label>
+                        <textarea rows="3" name="hero_judul_id" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500" placeholder="Contoh: Pramuwisata Profesional...">{!! $settings->hero_judul_id !!}</textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-2">Judul Hero (English)</label>
+                        <textarea rows="3" name="hero_judul_en" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500" placeholder="Contoh: Professional Guides...">{!! $settings->hero_judul_en !!}</textarea>
+                        <p class="text-xs text-gray-500 mt-1">Tip: Gunakan tag &lt;br&gt; untuk enter, dan &lt;span class="text-hpi-green"&gt;Teks&lt;/span&gt; untuk warna hijau.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 2: TEKS SAMBUTAN -->
+        <div class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-gray-100">
+            <h2 class="text-lg font-bold text-gray-800 mb-6 flex items-center gap-2">
+                <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
+                2. Teks Sambutan Ketua
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">Sambutan (Bahasa Indonesia)</label>
+                    <textarea rows="4" name="teks_sambutan_id" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-emerald-500">{{ $settings->teks_sambutan_id }}</textarea>
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">Sambutan (English)</label>
+                    <textarea rows="4" name="teks_sambutan_en" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-emerald-500">{{ $settings->teks_sambutan_en }}</textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 3: TENTANG KAMI SINGKAT -->
+        <div class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-gray-100">
+            <h2 class="text-lg font-bold text-gray-800 mb-6 flex items-center gap-2">
+                <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                3. Tentang Kami (Ringkasan di Beranda)
+            </h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">Judul (Bahasa Indonesia)</label>
+                    <input type="text" name="judul_tentang_kami_id" value="{{ $settings->judul_tentang_kami_id }}" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-emerald-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">Judul (English)</label>
+                    <input type="text" name="judul_tentang_kami_en" value="{{ $settings->judul_tentang_kami_en }}" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-emerald-500">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">Deskripsi (Bahasa Indonesia)</label>
+                    <textarea rows="5" name="deskripsi_tentang_kami_id" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-emerald-500">{{ $settings->deskripsi_tentang_kami_id }}</textarea>
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">Deskripsi (English)</label>
+                    <textarea rows="5" name="deskripsi_tentang_kami_en" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-emerald-500">{{ $settings->deskripsi_tentang_kami_en }}</textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tombol Simpan (Fixed di Kanan Bawah Form) -->
+        <div class="flex justify-end">
+            <button type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-8 rounded-xl shadow-lg shadow-emerald-200 transition-all flex items-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg>
+                Simpan Pengaturan
+            </button>
+        </div>
+    </form>
+
+</div>
+@endsection

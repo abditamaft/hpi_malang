@@ -49,4 +49,12 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     // Kategori Destinasi
     Route::resource('kategori-destinasi', \App\Http\Controllers\Admin\KategoriDestinasiController::class)
          ->parameters(['kategori-destinasi' => 'kategori_id']);
+    
+    // --- KODINGAN MAS (TAMBAHKAN INI DI BAWAHNYA) ---
+    // --- KODINGAN MAS ---
+    Route::get('/settings', [\App\Http\Controllers\Admin\WebSettingController::class, 'edit'])->name('settings.index');
+    Route::put('/settings', [\App\Http\Controllers\Admin\WebSettingController::class, 'update'])->name('settings.update');
+    Route::resource('ulasan', \App\Http\Controllers\Admin\UlasanController::class)->except(['create', 'store', 'show']);
+    // --- RUTE BARU: FAQ ---
+    Route::resource('faq', \App\Http\Controllers\Admin\FaqController::class);
 });
