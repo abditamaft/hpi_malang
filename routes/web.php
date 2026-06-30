@@ -21,6 +21,7 @@ Route::get('/', [FrontEndController::class, 'index']);
 Route::post('/kirim-ulasan', [FrontEndController::class, 'store'])->name('ulasan.store');
 Route::get('/tentang', [FrontEndController::class, 'tentang']);
 Route::get('/destinasi', [FrontEndController::class, 'destinasi']);
+Route::get('/layanan', [FrontEndController::class, 'layanan'])->name('layanan');
 
 Route::get('/direktori', function () {
     return view('direktori'); 
@@ -57,4 +58,11 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::resource('ulasan', \App\Http\Controllers\Admin\UlasanController::class)->except(['create', 'store', 'show']);
     // --- RUTE BARU: FAQ ---
     Route::resource('faq', \App\Http\Controllers\Admin\FaqController::class);
+    Route::resource('layanan', \App\Http\Controllers\Admin\LayananController::class);
+});
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [\App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [\App\Http\Controllers\ProfileController::class, 'destroy'])->name('profile.destroy');
 });

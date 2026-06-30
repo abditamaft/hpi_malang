@@ -53,6 +53,12 @@ class FrontEndController extends Controller
         return view('destinasi', compact('destinasi', 'unggulan', 'biasa', 'kategori', 'aktifKategori'));
     }
 
+   public function layanan()
+    {
+        $layanan = \App\Models\Layanan::orderBy('id', 'desc')->get(); 
+        return view('layanan', compact('layanan'));
+    }
+
     /**
      * Menyimpan data dari Form "Kirim Ulasan" di Beranda
      */
