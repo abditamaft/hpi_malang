@@ -80,10 +80,10 @@
             <div>
                 <h3 class="px-4 text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Konten Statis</h3>
                 <div class="space-y-1">
-                    <a href="/admin/visi-misi" class="block py-2 px-4 rounded-lg hover:bg-slate-800 hover:text-white transition">Visi & Misi</a>
+                    <a href="{{ route('admin.visi-misi.index') }}" class="block py-2 px-4 rounded-lg {{ request()->routeIs('admin.visi-misi*') ? 'bg-emerald-600/20 text-emerald-400 font-semibold' : 'hover:bg-slate-800 hover:text-white' }} transition">Visi & Misi</a>
                     <a href="{{ route('admin.keunggulan.index') }}" class="block py-2 px-4 rounded-lg {{ request()->routeIs('admin.keunggulan*') ? 'bg-emerald-600/20 text-emerald-400 font-semibold' : 'hover:bg-slate-800 hover:text-white' }} transition">Mengapa Memilih HPI</a>
                     <a href="{{ route('admin.alur-reservasi.index') }}" class="block py-2 px-4 rounded-lg {{ request()->routeIs('admin.alur-reservasi*') ? 'bg-emerald-600/20 text-emerald-400 font-semibold' : 'hover:bg-slate-800 hover:text-white' }} transition">Alur Reservasi</a>
-                    <a href="/admin/struktur-organisasi" class="block py-2 px-4 rounded-lg hover:bg-slate-800 hover:text-white transition">Struktur Organisasi</a>
+                    <a href="{{ route('admin.struktur-organisasi.index') }}" class="block py-2 px-4 rounded-lg {{ request()->routeIs('admin.struktur-organisasi*') ? 'bg-emerald-600/20 text-emerald-400 font-semibold' : 'hover:bg-slate-800 hover:text-white' }} transition">Struktur Organisasi</a>
                 </div>
             </div>
         </nav>

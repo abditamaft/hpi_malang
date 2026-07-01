@@ -19,7 +19,7 @@ Route::get('lang/{lang}', [LanguageController::class, 'switchLang'])->name('lang
 Route::get('/', [FrontEndController::class, 'index']); 
 
 Route::post('/kirim-ulasan', [FrontEndController::class, 'store'])->name('ulasan.store');
-Route::get('/tentang', [FrontEndController::class, 'tentang']);
+Route::get('/tentang', [\App\Http\Controllers\FrontEndController::class, 'tentang'])->name('tentang');
 Route::get('/destinasi', [FrontEndController::class, 'destinasi']);
 Route::get('/layanan', [FrontEndController::class, 'layanan'])->name('layanan');
 
@@ -61,6 +61,8 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::resource('layanan', \App\Http\Controllers\Admin\LayananController::class);
     Route::resource('keunggulan', \App\Http\Controllers\Admin\KeunggulanController::class);
     Route::resource('alur-reservasi', \App\Http\Controllers\Admin\AlurReservasiController::class);
+    Route::resource('visi-misi', \App\Http\Controllers\Admin\VisiMisiController::class);
+    Route::resource('struktur-organisasi', \App\Http\Controllers\Admin\StrukturOrganisasiController::class);
 });
 
 Route::middleware('auth')->group(function () {

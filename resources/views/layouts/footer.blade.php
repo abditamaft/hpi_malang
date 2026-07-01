@@ -2,6 +2,8 @@
     $locale = session('locale', 'id');
 @endphp
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+
 <style>
     .reveal-on-scroll {
         opacity: 0;
@@ -15,10 +17,11 @@
     .delay-100 { transition-delay: 100ms; }
     .delay-200 { transition-delay: 200ms; }
     .delay-300 { transition-delay: 300ms; }
+    .delay-400 { transition-delay: 400ms; }
 </style>
 
 <footer class="bg-[#EAEAEA] pt-20 pb-8 border-t border-gray-300 mt-20 overflow-hidden">
-    <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8">
+    <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 lg:gap-8">
         
         <div class="lg:col-span-2 pr-0 lg:pr-10 reveal-on-scroll">
             @if(isset($settings) && $settings->logo_footer)
@@ -54,25 +57,48 @@
                 </li>
             </ul>
         </div>
+
+        <div class="reveal-on-scroll delay-300">
+            <h4 class="font-bold text-gray-900 mb-5 tracking-wide">{{ $locale == 'id' ? 'IKUTI KAMI' : 'FOLLOW US' }}</h4>
+            <ul class="space-y-4 text-sm text-gray-600 font-medium">
+                @if(isset($settings) && $settings->link_instagram)
+                    <li>
+                        <a href="{{ $settings->link_instagram }}" class="hover:text-hpi-green hover:translate-x-1 transition-transform flex items-center gap-3 w-fit" target="_blank">
+                            <i class="fa-brands fa-instagram text-lg"></i> Instagram
+                        </a>
+                    </li>
+                @endif
+                
+                @if(isset($settings) && $settings->link_youtube)
+                    <li>
+                        <a href="{{ $settings->link_youtube }}" class="hover:text-hpi-green hover:translate-x-1 transition-transform flex items-center gap-3 w-fit" target="_blank">
+                            <i class="fa-brands fa-youtube text-lg"></i> YouTube
+                        </a>
+                    </li>
+                @endif
+                
+                @if(isset($settings) && $settings->link_facebook)
+                    <li>
+                        <a href="{{ $settings->link_facebook }}" class="hover:text-hpi-green hover:translate-x-1 transition-transform flex items-center gap-3 w-fit" target="_blank">
+                            <i class="fa-brands fa-facebook-f text-lg w-4 text-center"></i> Facebook
+                        </a>
+                    </li>
+                @endif
+                
+                @if(isset($settings) && $settings->link_twitter)
+                    <li>
+                        <a href="{{ $settings->link_twitter }}" class="hover:text-hpi-green hover:translate-x-1 transition-transform flex items-center gap-3 w-fit" target="_blank">
+                            <i class="fa-brands fa-x-twitter text-lg"></i> Twitter / X
+                        </a>
+                    </li>
+                @endif
+            </ul>
+        </div>
+
     </div>
 
-    <div class="max-w-7xl mx-auto px-6 mt-14 pt-8 border-t border-gray-300 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-500 font-medium reveal-on-scroll delay-300">
+    <div class="max-w-7xl mx-auto px-6 mt-14 pt-8 border-t border-gray-300 flex justify-center text-sm text-gray-500 font-medium reveal-on-scroll delay-400">
         <p>&copy; {{ date('Y') }} HPI Kabupaten Malang. Himpunan Pramuwisata Indonesia.</p>
-        
-        <div class="flex gap-5">
-            @if(isset($settings) && $settings->link_instagram)
-                <a href="{{ $settings->link_instagram }}" class="hover:text-hpi-green transition-colors" target="_blank">Instagram</a>
-            @endif
-            @if(isset($settings) && $settings->link_youtube)
-                <a href="{{ $settings->link_youtube }}" class="hover:text-hpi-green transition-colors" target="_blank">YouTube</a>
-            @endif
-            @if(isset($settings) && $settings->link_facebook)
-                <a href="{{ $settings->link_facebook }}" class="hover:text-hpi-green transition-colors" target="_blank">Facebook</a>
-            @endif
-            @if(isset($settings) && $settings->link_twitter)
-                <a href="{{ $settings->link_twitter }}" class="hover:text-hpi-green transition-colors" target="_blank">Twitter / X</a>
-            @endif
-        </div>
     </div>
 </footer>
 

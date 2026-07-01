@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Ulasan; // WAJIB DITAMBAHKAN agar bisa menyimpan data ke tabel ulasan
+use App\Models\WebSetting;
+use App\Models\VisiMisi;
+use App\Models\StrukturOrganisasi;
+
 
 class FrontEndController extends Controller
 {
@@ -20,7 +24,21 @@ class FrontEndController extends Controller
      */
     public function tentang()
     {
-        return view('tentang');
+        // 1. Ambil pengaturan web untuk judul
+        $settings = WebSetting::first();
+
+        // 2. Ambil Visi (Hanya 1 baris pertama)
+        $visi = VisiMisi::where('tipe', 'Visi')->first();
+
+        // 3. Ambil Misi (Bisa banyak, diurutkan berdasarkan kolom 'urutan')
+        $misi = VisiMisi::where('tipe', 'Misi')->orderBy('urutan', 'asc')->get();
+
+        // 4. Ambil Struktur Organisasi berdasarkan kategorinya
+        $dewanPenasihat = StrukturOrganisasi::where('kategori_pengurus', 'Dewan Penasihat')->get();
+        $dewanKodeEtik = StrukturOrganisasi::where('kategori_pengurus', 'Dewan Kode Etik')->get();
+        $pengurusHarian = StrukturOrganisasi::where('kategori_pengurus', 'Pengurus Harian')->get();
+
+        return view('tentang', compact('settings', 'visi', 'misi', 'dewanPenasihat', 'dewanKodeEtik', 'pengurusHarian'));
     }
 
     /**
