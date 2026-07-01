@@ -59,6 +59,8 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     // --- RUTE BARU: FAQ ---
     Route::resource('faq', \App\Http\Controllers\Admin\FaqController::class);
     Route::resource('layanan', \App\Http\Controllers\Admin\LayananController::class);
+    Route::resource('keunggulan', \App\Http\Controllers\Admin\KeunggulanController::class);
+    Route::resource('alur-reservasi', \App\Http\Controllers\Admin\AlurReservasiController::class);
 });
 
 Route::middleware('auth')->group(function () {

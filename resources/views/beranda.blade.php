@@ -137,7 +137,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
             @foreach(\App\Models\Keunggulan::all() as $item)
             <div class="bg-white p-6 md:p-8 rounded-2xl border border-gray-200 hover:shadow-lg transition-shadow reveal-on-scroll">
-                <div class="text-hpi-green text-3xl mb-4 md:mb-5">{!! $item->ikon !!}</div>
+                <div class="text-hpi-green mb-4 md:mb-5 w-10 h-10 [&>svg]:w-full [&>svg]:h-full">{!! $item->ikon !!}</div>
                 <h4 class="font-bold text-base md:text-lg text-gray-900 mb-2 md:mb-3">{{ $locale == 'id' ? $item->judul_id : $item->judul_en }}</h4>
                 <p class="text-xs md:text-sm text-gray-600 leading-relaxed">{{ $locale == 'id' ? $item->deskripsi_id : $item->deskripsi_en }}</p>
             </div>
