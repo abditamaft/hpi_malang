@@ -7,6 +7,7 @@ use App\Models\Ulasan; // WAJIB DITAMBAHKAN agar bisa menyimpan data ke tabel ul
 use App\Models\WebSetting;
 use App\Models\VisiMisi;
 use App\Models\StrukturOrganisasi;
+use App\Models\KegiatanBerita;
 
 
 class FrontEndController extends Controller
@@ -109,4 +110,34 @@ class FrontEndController extends Controller
     public function edit(string $id) {}
     public function update(Request $request, string $id) {}
     public function destroy(string $id) {}
+
+
+
+    public function berita()
+    {
+        $kegiatanMendatang = KegiatanBerita::published()
+            ->kegiatan()
+            ->where('tanggal_kegiatan', '>=', now())
+            ->orderBy('tanggal_kegiatan')
+            ->get();
+
+        $beritaTerbaru = KegiatanBerita::published()
+            ->berita()
+            ->latest('tanggal_kegiatan')
+            ->paginate(9);
+
+        return view('berita_acara', [
+            'kegiatanMendatang' => $kegiatanMendatang,
+            'beritaTerbaru' => $beritaTerbaru,
+        ]);
+    }
+    public function showBerita(string $slug)
+    {
+        $item = KegiatanBerita::published()->where('slug', $slug)->firstOrFail();
+        if ($item->tipe === 'kegiatan') {
+            return view('showKegiatan', ['item' => $item]);
+        }
+        return view('showBerita', ['item' => $item]);
+    }
+    
 }

@@ -62,7 +62,7 @@
                     <a href="{{ route('admin.destinasi.index') }}" class="block py-2 px-4 rounded-lg {{ request()->routeIs('admin.destinasi*') ? 'bg-emerald-600/20 text-emerald-400 font-semibold' : 'hover:bg-slate-800 hover:text-white' }} transition">Destinasi Wisata</a>
                     <a href="{{ route('admin.kategori-destinasi.index') }}" class="block py-2 px-4 rounded-lg {{ request()->routeIs('admin.kategori-destinasi*') ? 'bg-emerald-600/20 text-emerald-400 font-semibold' : 'hover:bg-slate-800 hover:text-white' }} transition">Kategori Destinasi</a>
                     <a href="/admin/layanan" class="block py-2 px-4 rounded-lg {{ request()->is('admin/layanan*') ? 'bg-emerald-600/20 text-emerald-400 font-semibold' : 'hover:bg-slate-800 hover:text-white' }} transition">Layanan Pemanduan</a>
-                    <a href="/admin/berita" class="block py-2 px-4 rounded-lg {{ request()->is('admin/berita*') ? 'bg-emerald-600/20 text-emerald-400 font-semibold' : 'hover:bg-slate-800 hover:text-white' }} transition">Berita &amp; Kegiatan</a>
+                    <a href="{{ route('admin.berita.index') }}" class="block py-2 px-4 rounded-lg {{ request()->routeIs('admin.berita*') ? 'bg-emerald-600/20 text-emerald-400 font-semibold' : 'hover:bg-slate-800 hover:text-white' }} transition">Berita &amp; Acara</a>
                 </div>
             </div>
 

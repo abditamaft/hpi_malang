@@ -22,6 +22,8 @@ Route::post('/kirim-ulasan', [FrontEndController::class, 'store'])->name('ulasan
 Route::get('/tentang', [\App\Http\Controllers\FrontEndController::class, 'tentang'])->name('tentang');
 Route::get('/destinasi', [FrontEndController::class, 'destinasi']);
 Route::get('/layanan', [FrontEndController::class, 'layanan'])->name('layanan');
+Route::get('/berita', [FrontEndController::class, 'berita'])->name('berita');
+Route::get('/berita/{slug}', [FrontEndController::class, 'showBerita'])->name('berita.show');
 
 Route::get('/direktori', function () {
     return view('direktori'); 
@@ -63,6 +65,9 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::resource('alur-reservasi', \App\Http\Controllers\Admin\AlurReservasiController::class);
     Route::resource('visi-misi', \App\Http\Controllers\Admin\VisiMisiController::class);
     Route::resource('struktur-organisasi', \App\Http\Controllers\Admin\StrukturOrganisasiController::class);
+
+    // Rute untuk Berita & Kegiatan
+    Route::resource('berita', \App\Http\Controllers\Admin\KegiatanBeritaController::class)->parameters(['berita' => 'berita']);
 });
 
 Route::middleware('auth')->group(function () {
