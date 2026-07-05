@@ -19,15 +19,13 @@ Route::get('lang/{lang}', [LanguageController::class, 'switchLang'])->name('lang
 Route::get('/', [FrontEndController::class, 'index']); 
 
 Route::post('/kirim-ulasan', [FrontEndController::class, 'store'])->name('ulasan.store');
-Route::get('/tentang', [\App\Http\Controllers\FrontEndController::class, 'tentang'])->name('tentang');
+Route::get('/tentang', [FrontEndController::class, 'tentang'])->name('tentang');
 Route::get('/destinasi', [FrontEndController::class, 'destinasi']);
 Route::get('/layanan', [FrontEndController::class, 'layanan'])->name('layanan');
 Route::get('/berita', [FrontEndController::class, 'berita'])->name('berita');
 Route::get('/berita/{slug}', [FrontEndController::class, 'showBerita'])->name('berita.show');
-
-Route::get('/direktori', function () {
-    return view('direktori'); 
-});
+Route::get('/direktori', [FrontEndController::class, 'direktoriPramuwisata'])->name('direktori');
+Route::get('/direktori/{slug}', [FrontEndController::class, 'showPramuwisata'])->name('direktori.show');
 
 Route::get('/hubungi-kami', function () {
     return view('kontak'); 
@@ -68,6 +66,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 
     // Rute untuk Berita & Kegiatan
     Route::resource('berita', \App\Http\Controllers\Admin\KegiatanBeritaController::class)->parameters(['berita' => 'berita']);
+    Route::resource('direktori', \App\Http\Controllers\Admin\PramuwisataController::class);
 });
 
 Route::middleware('auth')->group(function () {

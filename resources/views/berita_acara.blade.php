@@ -9,14 +9,18 @@
     }
 @endphp
 <div class="pt-24 pb-0 bg-hpi-light">
-    {{-- judul dan subjudul--}}
-    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-10">
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-6 text-center">
         <p class="text-emerald-600 font-bold text-xs tracking-widest uppercase mb-3">
             {{ $locale == 'id' ? 'Kegiatan & Berita' : 'Events & News' }}
         </p>
-        <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 max-w-2xl leading-tight">
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-emerald-900 mb-4">
             {{ $locale == 'id' ? 'Informasi Terkini & Agenda Pariwisata Kabupaten Malang' : 'Latest Information & Tourism Agenda of Malang Regency' }}
         </h1>
+        <p class="text-gray-500 max-w-xl mx-auto leading-relaxed">
+            {{ $locale == 'id'
+                ? 'Dapatkan kabar terbaru dan ikuti acara menarik yang kami selenggarakan.'
+                : 'Stay informed with the latest news and join our exciting events.' }}
+        </p>
     </section>
 
     {{-- ================= KEGIATAN MENDATANG ================= --}}

@@ -58,7 +58,7 @@
             <div>
                 <h3 class="px-4 text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Manajemen Konten</h3>
                 <div class="space-y-1">
-                    <a href="/admin/pramuwisata" class="block py-2 px-4 rounded-lg {{ request()->is('admin/pramuwisata*') ? 'bg-emerald-600/20 text-emerald-400 font-semibold' : 'hover:bg-slate-800 hover:text-white' }} transition">Direktori Pramuwisata</a>
+                    <a href="{{ route('admin.direktori.index') }}" class="block py-2 px-4 rounded-lg {{ request()->routeIs('admin.direktori*') ? 'bg-emerald-600/20 text-emerald-400 font-semibold' : 'hover:bg-slate-800 hover:text-white' }} transition">Direktori Pramuwisata</a>
                     <a href="{{ route('admin.destinasi.index') }}" class="block py-2 px-4 rounded-lg {{ request()->routeIs('admin.destinasi*') ? 'bg-emerald-600/20 text-emerald-400 font-semibold' : 'hover:bg-slate-800 hover:text-white' }} transition">Destinasi Wisata</a>
                     <a href="{{ route('admin.kategori-destinasi.index') }}" class="block py-2 px-4 rounded-lg {{ request()->routeIs('admin.kategori-destinasi*') ? 'bg-emerald-600/20 text-emerald-400 font-semibold' : 'hover:bg-slate-800 hover:text-white' }} transition">Kategori Destinasi</a>
                     <a href="/admin/layanan" class="block py-2 px-4 rounded-lg {{ request()->is('admin/layanan*') ? 'bg-emerald-600/20 text-emerald-400 font-semibold' : 'hover:bg-slate-800 hover:text-white' }} transition">Layanan Pemanduan</a>

@@ -8,6 +8,7 @@ use App\Models\WebSetting;
 use App\Models\VisiMisi;
 use App\Models\StrukturOrganisasi;
 use App\Models\KegiatanBerita;
+use App\Models\Pramuwisata;
 
 
 class FrontEndController extends Controller
@@ -138,6 +139,31 @@ class FrontEndController extends Controller
             return view('showKegiatan', ['item' => $item]);
         }
         return view('showBerita', ['item' => $item]);
+    }
+
+
+
+    public function direktoriPramuwisata(Request $request)
+    {
+        $pramuwisata = Pramuwisata::published()
+            ->cariNama($request->input('nama'))
+            ->filterBahasa($request->input('bahasa', []))
+            ->filterSpesialisasi($request->input('spesialisasi', []))
+            ->latest('dibuat_pada')
+            ->paginate(9)
+            ->withQueryString();
+
+        return view('direktori', [
+            'pramuwisata' => $pramuwisata,
+            'daftarBahasa' => Pramuwisata::daftarBahasaUnik(),
+            'daftarSpesialisasi' => Pramuwisata::daftarSpesialisasiUnik(),
+        ]);
+    }
+
+    public function showPramuwisata(string $slug)
+    {
+        $item = Pramuwisata::published()->where('slug', $slug)->firstOrFail();
+        return view('showPramuwisata', ['item' => $item]);
     }
     
 }
