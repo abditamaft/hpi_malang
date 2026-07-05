@@ -21,23 +21,92 @@
             @endif
         </a>
 
-        <nav class="hidden lg:flex items-center gap-1 font-medium text-sm transition-all duration-500">
-            <a href="/" class="px-4 py-2 rounded-full transition-colors {{ request()->is('/') ? 'bg-gray-800 text-white' : 'text-gray-600 hover:text-hpi-green hover:bg-gray-100' }}">
+        <nav class="relative hidden lg:flex items-center gap-1 font-medium text-sm"
+             x-data="{
+                 activeRect: { left: '0px', width: '0px', height: '0px', opacity: 0 },
+                 active: null,
+                 updateRect(el) {
+                     if (!el) return;
+                     this.activeRect = {
+                         left: el.offsetLeft + 'px',
+                         width: el.offsetWidth + 'px',
+                         height: el.offsetHeight + 'px',
+                         opacity: 1
+                     };
+                 },
+                 init() {
+                     this.$nextTick(() => {
+                         const links = Array.from(this.$el.querySelectorAll('.nav-link-item'));
+                         const currentActiveEl = this.$el.querySelector('.nav-link-active');
+                         const currentActiveIndex = links.indexOf(currentActiveEl);
+                         
+                         const prevIndexVal = localStorage.getItem('hpi_prev_nav_index');
+                         
+                         if (prevIndexVal !== null && currentActiveIndex !== -1 && parseInt(prevIndexVal) !== currentActiveIndex) {
+                             const prevIndex = parseInt(prevIndexVal);
+                             if (links[prevIndex]) {
+                                 this.active = prevIndex;
+                                 this.updateRect(links[prevIndex]);
+                                 setTimeout(() => {
+                                     this.active = currentActiveIndex;
+                                     this.updateRect(currentActiveEl);
+                                     localStorage.setItem('hpi_prev_nav_index', currentActiveIndex);
+                                 }, 100);
+                             } else {
+                                 this.active = currentActiveIndex;
+                                 this.updateRect(currentActiveEl);
+                                 localStorage.setItem('hpi_prev_nav_index', currentActiveIndex);
+                             }
+                         } else {
+                             this.active = currentActiveIndex;
+                             this.updateRect(currentActiveEl);
+                             if (currentActiveIndex !== -1) {
+                                 localStorage.setItem('hpi_prev_nav_index', currentActiveIndex);
+                             }
+                         }
+                     });
+                 }
+             }">
+            
+            <!-- Sliding Highlight Shape -->
+            <div class="absolute bg-[#044C3F] rounded-full transition-all duration-500 ease-out z-0 pointer-events-none"
+                 :style="{ 
+                     left: activeRect.left, 
+                     width: activeRect.width, 
+                     height: activeRect.height, 
+                     opacity: activeRect.opacity,
+                     top: '50%',
+                     transform: 'translateY(-50%)'
+                 }"></div>
+
+            <a href="/" @click="localStorage.setItem('hpi_prev_nav_index', 0)"
+               :class="active === 0 ? 'text-white' : (active !== null ? 'text-gray-600 hover:text-hpi-green' : '{{ request()->is('/') ? 'text-white' : 'text-gray-600 hover:text-hpi-green' }}')"
+               class="nav-link-item relative z-10 px-4 py-2 rounded-full transition-colors duration-500 {{ request()->is('/') ? 'nav-link-active' : '' }}">
                 {{ $locale == 'id' ? 'Beranda' : 'Home' }}
             </a>
-            <a href="/tentang" class="px-4 py-2 rounded-full transition-colors {{ request()->is('tentang') ? 'bg-gray-800 text-white' : 'text-gray-600 hover:text-hpi-green hover:bg-gray-100' }}">
+            <a href="/tentang" @click="localStorage.setItem('hpi_prev_nav_index', 1)"
+               :class="active === 1 ? 'text-white' : (active !== null ? 'text-gray-600 hover:text-hpi-green' : '{{ request()->is('tentang') ? 'text-white' : 'text-gray-600 hover:text-hpi-green' }}')"
+               class="nav-link-item relative z-10 px-4 py-2 rounded-full transition-colors duration-500 {{ request()->is('tentang') ? 'nav-link-active' : '' }}">
                 {{ $locale == 'id' ? 'Tentang' : 'About' }}
             </a>
-            <a href="/destinasi" class="px-4 py-2 rounded-full transition-colors {{ request()->is('destinasi') ? 'bg-gray-800 text-white' : 'text-gray-600 hover:text-hpi-green hover:bg-gray-100' }}">
+            <a href="/destinasi" @click="localStorage.setItem('hpi_prev_nav_index', 2)"
+               :class="active === 2 ? 'text-white' : (active !== null ? 'text-gray-600 hover:text-hpi-green' : '{{ request()->is('destinasi') ? 'text-white' : 'text-gray-600 hover:text-hpi-green' }}')"
+               class="nav-link-item relative z-10 px-4 py-2 rounded-full transition-colors duration-500 {{ request()->is('destinasi') ? 'nav-link-active' : '' }}">
                 {{ $locale == 'id' ? 'Destinasi' : 'Destinations' }}
             </a>
-            <a href="/layanan" class="px-4 py-2 rounded-full transition-colors {{ request()->is('layanan') ? 'bg-gray-800 text-white' : 'text-gray-600 hover:text-hpi-green hover:bg-gray-100' }}">
+            <a href="/layanan" @click="localStorage.setItem('hpi_prev_nav_index', 3)"
+               :class="active === 3 ? 'text-white' : (active !== null ? 'text-gray-600 hover:text-hpi-green' : '{{ request()->is('layanan') ? 'text-white' : 'text-gray-600 hover:text-hpi-green' }}')"
+               class="nav-link-item relative z-10 px-4 py-2 rounded-full transition-colors duration-500 {{ request()->is('layanan') ? 'nav-link-active' : '' }}">
                 {{ $locale == 'id' ? 'Layanan' : 'Services' }}
             </a>
-            <a href="/direktori" class="px-4 py-2 rounded-full transition-colors {{ request()->is('direktori') ? 'bg-gray-800 text-white' : 'text-gray-600 hover:text-hpi-green hover:bg-gray-100' }}">
+            <a href="/direktori" @click="localStorage.setItem('hpi_prev_nav_index', 4)"
+               :class="active === 4 ? 'text-white' : (active !== null ? 'text-gray-600 hover:text-hpi-green' : '{{ request()->is('direktori') ? 'text-white' : 'text-gray-600 hover:text-hpi-green' }}')"
+               class="nav-link-item relative z-10 px-4 py-2 rounded-full transition-colors duration-500 {{ request()->is('direktori') ? 'nav-link-active' : '' }}">
                 {{ $locale == 'id' ? 'Direktori' : 'Directory' }}
             </a>
-            <a href="/berita" class="px-4 py-2 rounded-full transition-colors {{ request()->is('berita') ? 'bg-gray-800 text-white' : 'text-gray-600 hover:text-hpi-green hover:bg-gray-100' }}">
+            <a href="/berita" @click="localStorage.setItem('hpi_prev_nav_index', 5)"
+               :class="active === 5 ? 'text-white' : (active !== null ? 'text-gray-600 hover:text-hpi-green' : '{{ request()->is('berita') ? 'text-white' : 'text-gray-600 hover:text-hpi-green' }}')"
+               class="nav-link-item relative z-10 px-4 py-2 rounded-full transition-colors duration-500 {{ request()->is('berita') ? 'nav-link-active' : '' }}">
                 {{ $locale == 'id' ? 'Berita & Acara' : 'News & Events' }}
             </a>
         </nav>

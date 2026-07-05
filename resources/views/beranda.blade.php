@@ -10,56 +10,65 @@
 
 <!-- 1. HERO SECTION (100% Dinamis & Responsif) -->
 <!-- Menggunakan bg-cover bg-center agar aman di HP (terpotong rapi tanpa gepeng) -->
-<section class="relative min-h-[100dvh] flex flex-col justify-between pt-24 pb-10 md:pb-16 text-white overflow-hidden">
+<section id="hero-section" class="relative min-h-[100dvh] flex flex-col justify-between pt-24 pb-10 md:pb-16 text-white overflow-hidden bg-neutral-900">
     
     <!-- Background Gambar dari Database (Jika kosong, pakai gambar default Bromo) -->
-    <div class="absolute inset-0 bg-cover bg-center z-0" 
+    <div class="absolute inset-0 bg-cover bg-center z-0 animate-hero-bg" 
          style="background-image: url('{{ $settings && $settings->hero_gambar ? asset('storage/'.$settings->hero_gambar) : 'https://source.unsplash.com/1600x900/?mountain,bromo' }}');">
         <div class="absolute inset-0 bg-black/40"></div>
     </div>
-    
-    <!-- Teks Judul Utama (Di Tengah) -->
-    <div class="relative z-10 flex-1 flex flex-col items-center justify-center text-center px-6 mt-10 md:mt-0 reveal-on-scroll">
-        @if($settings && ($locale == 'id' ? $settings->hero_judul_id : $settings->hero_judul_en))
-            <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-4 leading-tight tracking-wide drop-shadow-lg">
-                {!! $locale == 'id' ? $settings->hero_judul_id : $settings->hero_judul_en !!}
-            </h1>
-        @else
-            <!-- Fallback Default persis seperti desain -->
-            <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-4 leading-tight tracking-wide drop-shadow-lg">
-                Pramuwisata Profesional,<br>
-                <span class="text-hpi-green">Berdaya Saing,</span><br>
-                dan Sejahtera
-            </h1>
-        @endif
-    </div>
 
-    <!-- Badge & Buttons (Di Pojok Kiri Bawah sesuai desain image_1819fc.png) -->
-    <div class="relative z-10 w-full max-w-7xl mx-auto px-6 reveal-on-scroll delay-200">
-        <div class="max-w-md text-left">
-            
-            <!-- Badge Sertifikasi (Glassmorphism Halus) -->
-            <div class="bg-white/10 backdrop-blur-md border border-white/20 p-4 md:p-5 rounded-xl mb-5 shadow-lg">
-                <div class="flex items-center gap-2 mb-2">
-                    <h3 class="font-bold text-base md:text-lg">{{ $locale == 'id' ? 'Sertifikasi Resmi' : 'Official Certification' }}</h3>
-                    <!-- Ikon Centang Hijau -->
-                    <svg class="w-5 h-5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+    <!-- SVG Curve Transition Overlay -->
+    <div class="absolute inset-0 pointer-events-none z-20">
+        <svg class="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+            <path id="curve-path" d="M 0 100 Q 50 100 100 100 L 100 100 L 0 100 Z" fill="#ffffff" />
+        </svg>
+    </div>
+    
+    <div id="hero-content" class="relative z-10 flex-1 flex flex-col justify-between w-full">
+        <!-- Teks Judul Utama (Di Tengah) -->
+        <div class="flex-1 flex flex-col items-center justify-center text-center px-6 mt-10 md:mt-0 reveal-on-scroll">
+            @if($settings && ($locale == 'id' ? $settings->hero_judul_id : $settings->hero_judul_en))
+                <h1 id="hero-title" class="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-4 leading-tight tracking-wide drop-shadow-lg">
+                    {!! $locale == 'id' ? $settings->hero_judul_id : $settings->hero_judul_en !!}
+                </h1>
+            @else
+                <!-- Fallback Default persis seperti desain -->
+                <h1 id="hero-title" class="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-4 leading-tight tracking-wide drop-shadow-lg">
+                    Pramuwisata Profesional,<br>
+                    <span class="text-hpi-green">Berdaya Saing,</span><br>
+                    dan Sejahtera
+                </h1>
+            @endif
+        </div>
+
+        <!-- Badge & Buttons (Di Pojok Kiri Bawah sesuai desain image_1819fc.png) -->
+        <div class="w-full max-w-7xl mx-auto px-6 reveal-on-scroll delay-200">
+            <div class="max-w-md text-left">
+                
+                <!-- Badge Sertifikasi (Glassmorphism Halus) -->
+                <div class="bg-white/10 backdrop-blur-md border border-white/20 p-4 md:p-5 rounded-xl mb-5 shadow-lg">
+                    <div class="flex items-center gap-2 mb-2">
+                        <h3 class="font-bold text-base md:text-lg">{{ $locale == 'id' ? 'Sertifikasi Resmi' : 'Official Certification' }}</h3>
+                        <!-- Ikon Centang Hijau -->
+                        <svg class="w-5 h-5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                    </div>
+                    <p class="text-xs md:text-sm text-gray-200 leading-relaxed">
+                        {{ $locale == 'id' ? 'Pemandu kami memiliki lisensi resmi standar kompetensi nasional.' : 'Our guides hold official national competency standard licenses.' }}
+                    </p>
                 </div>
-                <p class="text-xs md:text-sm text-gray-200 leading-relaxed">
-                    {{ $locale == 'id' ? 'Pemandu kami memiliki lisensi resmi standar kompetensi nasional.' : 'Our guides hold official national competency standard licenses.' }}
-                </p>
+                
+                <!-- Buttons (Flex wrap agar turun ke bawah otomatis di HP kecil) -->
+                <div class="flex flex-wrap gap-3 md:gap-4">
+                    <a href="/direktori" class="bg-hpi-green hover:bg-emerald-900 text-white px-5 md:px-6 py-2.5 md:py-3 rounded-lg font-semibold transition text-sm md:text-base text-center flex-grow md:flex-grow-0">
+                        {{ $locale == 'id' ? 'Cari Pemandu' : 'Find a Guide' }}
+                    </a>
+                    <a href="/tentang" class="bg-black/20 backdrop-blur-sm border border-white hover:bg-white/20 text-white px-5 md:px-6 py-2.5 md:py-3 rounded-lg font-semibold transition text-sm md:text-base text-center flex-grow md:flex-grow-0">
+                        {{ $locale == 'id' ? 'Pelajari Lebih Lanjut' : 'Learn More' }}
+                    </a>
+                </div>
+                
             </div>
-            
-            <!-- Buttons (Flex wrap agar turun ke bawah otomatis di HP kecil) -->
-            <div class="flex flex-wrap gap-3 md:gap-4">
-                <a href="/direktori" class="bg-hpi-green hover:bg-emerald-900 text-white px-5 md:px-6 py-2.5 md:py-3 rounded-lg font-semibold transition text-sm md:text-base text-center flex-grow md:flex-grow-0">
-                    {{ $locale == 'id' ? 'Cari Pemandu' : 'Find a Guide' }}
-                </a>
-                <a href="/tentang" class="bg-black/20 backdrop-blur-sm border border-white hover:bg-white/20 text-white px-5 md:px-6 py-2.5 md:py-3 rounded-lg font-semibold transition text-sm md:text-base text-center flex-grow md:flex-grow-0">
-                    {{ $locale == 'id' ? 'Pelajari Lebih Lanjut' : 'Learn More' }}
-                </a>
-            </div>
-            
         </div>
     </div>
 </section>
@@ -150,41 +159,128 @@
 <section class="py-16 md:py-24 bg-[#F4F4F4] overflow-hidden">
     <div class="max-w-7xl mx-auto px-6">
         <h2 class="text-2xl md:text-3xl font-bold text-center mb-10 md:mb-14 text-hpi-green">{{ $locale == 'id' ? 'Destinasi Wisata' : 'Tourist Destinations' }}</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8 mb-8 md:mb-10">
-            @foreach(\App\Models\Destinasi::limit(3)->get() as $destinasi)
-            <div class="relative group rounded-2xl md:rounded-3xl overflow-hidden h-72 md:h-96 reveal-on-scroll shadow-md">
-                <img src="{{ $destinasi->url_gambar }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
-                <div class="absolute bottom-6 left-6">
-                    <h3 class="text-lg md:text-xl font-bold text-white">{{ $locale == 'id' ? $destinasi->nama_destinasi_id : $destinasi->nama_destinasi_en }}</h3>
+        <style>
+            #destinasi-card-container {
+                position: relative;
+                height: 380px;
+                width: 100%;
+                max-width: 896px;
+                margin: 4rem auto;
+                overflow: visible;
+            }
+            @media (min-width: 768px) {
+                #destinasi-card-container {
+                    height: 520px;
+                }
+            }
+            .destinasi-card {
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                width: 12rem; /* 192px */
+                height: 16rem; /* 256px */
+                border-radius: 1rem;
+                overflow: hidden;
+                box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+                transform-origin: bottom center;
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                background-color: #e5e7eb;
+            }
+            @media (min-width: 768px) {
+                .destinasi-card {
+                    width: 15rem; /* 240px */
+                    height: 20rem; /* 320px */
+                    border-radius: 1.5rem;
+                }
+            }
+        </style>
+        <div id="destinasi-card-container">
+            @foreach(\App\Models\Destinasi::limit(5)->get() as $index => $destinasi)
+            <div class="destinasi-card" style="z-index: {{ 10 + $index }}">
+                @if($destinasi->url_gambar)
+                    <img src="{{ asset('storage/' . $destinasi->url_gambar) }}" class="w-full h-full object-cover">
+                @else
+                    <div class="w-full h-full bg-gray-200 flex items-center justify-center text-gray-400 text-xs">No Image</div>
+                @endif
+                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/35 to-transparent z-10"></div>
+                <div class="absolute bottom-4 left-4 right-4 z-20">
+                    <h3 class="text-xs md:text-sm font-bold text-white mb-2 leading-tight">{{ $locale == 'id' ? $destinasi->nama_destinasi_id : $destinasi->nama_destinasi_en }}</h3>
                 </div>
             </div>
             @endforeach
         </div>
-        <div class="text-center md:text-right">
-            <a href="/destinasi" class="inline-flex items-center gap-2 text-sm font-semibold text-gray-600 hover:text-hpi-green transition reveal-on-scroll">
-                {{ $locale == 'id' ? 'Lihat Semua' : 'View All' }} &rarr;
+        <div class="text-center mt-12 relative z-30">
+            <a href="/destinasi" class="inline-flex items-center gap-2 bg-hpi-green hover:bg-emerald-950 text-white font-bold py-3 px-8 rounded-full transition shadow-md hover:shadow-lg">
+                {{ $locale == 'id' ? 'Lihat Semua Destinasi' : 'View All Destinations' }} &rarr;
             </a>
         </div>
     </div>
 </section>
 
 <!-- 6. LAYANAN PEMANDUAN -->
+@php
+    $layananList = \App\Models\Layanan::limit(5)->get();
+    $totalLayanan = count($layananList);
+@endphp
 <section class="py-16 md:py-24 bg-white overflow-hidden">
     <div class="max-w-7xl mx-auto px-6">
-        <h2 class="text-2xl md:text-3xl font-bold text-center mb-10 md:mb-14 text-hpi-green">{{ $locale == 'id' ? 'Layanan Pemanduan' : 'Guiding Services' }}</h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 mb-8 md:mb-10">
-            @foreach(\App\Models\Layanan::limit(3)->get() as $layanan)
-            <div class="p-6 md:p-8 rounded-2xl border border-gray-200 hover:border-hpi-green hover:shadow-md transition reveal-on-scroll">
-                <div class="text-hpi-green text-3xl mb-4 md:mb-5">{!! $layanan->ikon !!}</div>
-                <h4 class="font-bold text-base md:text-lg mb-2 md:mb-3">{{ $locale == 'id' ? $layanan->nama_layanan_id : $layanan->nama_layanan_en }}</h4>
-                <p class="text-xs md:text-sm text-gray-600 leading-relaxed">{{ $locale == 'id' ? $layanan->deskripsi_id : $layanan->deskripsi_en }}</p>
+        <h2 class="text-2xl md:text-3xl font-bold text-center mb-16 text-hpi-green">{{ $locale == 'id' ? 'Layanan Pemanduan' : 'Guiding Services' }}</h2>
+        
+        <div class="relative w-full max-w-2xl mx-auto h-[320px] md:h-[420px] flex items-center justify-center" 
+             x-data="{ active: 0, total: {{ $totalLayanan }} }" 
+             x-init="setInterval(() => { active = (active + 1) % total }, 5000)">
+            
+            <!-- Cards Container -->
+            <div class="relative w-full h-full">
+                @foreach($layananList as $index => $layanan)
+                <div class="absolute inset-0 w-full h-full rounded-2xl overflow-hidden shadow-xl transition-all duration-500 ease-out flex flex-col justify-end p-6 md:p-8"
+                     :style="`
+                        transform: scale(${ 1 - ((( {{ $index }} - active + total ) % total) * 0.05) }) translateY(-${ (( {{ $index }} - active + total ) % total) * 20 }px);
+                        z-index: ${ total - (( {{ $index }} - active + total ) % total) };
+                        opacity: ${ (( {{ $index }} - active + total ) % total) < 4 ? 1 : 0 };
+                        pointer-events: ${ (( {{ $index }} - active + total ) % total) === 0 ? 'auto' : 'none' };
+                     `">
+                    
+                    <!-- Background Image -->
+                    @if($layanan->url_gambar)
+                        <img src="{{ asset('storage/' . $layanan->url_gambar) }}" alt="{{ $locale == 'id' ? $layanan->nama_layanan_id : $layanan->nama_layanan_en }}" class="absolute inset-0 w-full h-full object-cover">
+                    @else
+                        <div class="absolute inset-0 w-full h-full bg-neutral-800 flex items-center justify-center text-gray-500">No Image</div>
+                    @endif
+                    
+                    <!-- Gradient Overlay -->
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent z-10"></div>
+                    
+                    <!-- Text Content -->
+                    <div class="relative z-20 text-white">
+                        <h4 class="font-bold text-lg md:text-2xl mb-2 text-white">{{ $locale == 'id' ? $layanan->nama_layanan_id : $layanan->nama_layanan_en }}</h4>
+                        <p class="text-xs md:text-sm text-gray-200 leading-relaxed line-clamp-3 md:line-clamp-none">{{ $locale == 'id' ? $layanan->deskripsi_id : $layanan->deskripsi_en }}</p>
+                    </div>
+                </div>
+                @endforeach
             </div>
-            @endforeach
+
+            <!-- Navigation Buttons -->
+            <!-- Left Button -->
+            <button @click="active = (active - 1 + total) % total" 
+                    class="absolute -left-4 md:-left-12 z-50 bg-slate-900/60 hover:bg-slate-900/80 text-white w-10 h-10 md:w-14 md:h-14 rounded-full flex items-center justify-center transition backdrop-blur-sm shadow-lg focus:outline-none">
+                <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                </svg>
+            </button>
+            
+            <!-- Right Button -->
+            <button @click="active = (active + 1) % total" 
+                    class="absolute -right-4 md:-right-12 z-50 bg-slate-900/60 hover:bg-slate-900/80 text-white w-10 h-10 md:w-14 md:h-14 rounded-full flex items-center justify-center transition backdrop-blur-sm shadow-lg focus:outline-none">
+                <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                </svg>
+            </button>
         </div>
-        <div class="text-center md:text-right">
-            <a href="/layanan" class="inline-flex items-center gap-2 text-sm font-semibold text-gray-600 hover:text-hpi-green transition reveal-on-scroll">
-                {{ $locale == 'id' ? 'Lihat Semua' : 'View All' }} &rarr;
+
+        <div class="text-center mt-16">
+            <a href="/layanan" class="inline-flex items-center gap-2 bg-hpi-green hover:bg-emerald-950 text-white font-bold py-3 px-8 rounded-full transition shadow-md hover:shadow-lg">
+                {{ $locale == 'id' ? 'Lihat Pemanduan' : 'View Guiding' }} &rarr;
             </a>
         </div>
     </div>
@@ -306,9 +402,177 @@
     </div>
 </section>
 
-<!-- SCRIPT ANIMASI (Intersection Observer) -->
+<!-- Load GSAP & ScrollTrigger CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+<!-- SCRIPT ANIMASI (GSAP & Intersection Observer) -->
 <script>
     document.addEventListener("DOMContentLoaded", function() {
+        // Function to split text nodes into words and chars wrapping in spans
+        function splitText(element) {
+            const nodes = Array.from(element.childNodes);
+            element.innerHTML = '';
+            nodes.forEach(node => {
+                if (node.nodeType === Node.TEXT_NODE) {
+                    const words = node.textContent.split(/(\s+)/);
+                    words.forEach(word => {
+                        if (word.trim().length === 0) {
+                            element.appendChild(document.createTextNode(word));
+                        } else {
+                            const span = document.createElement('span');
+                            span.className = 'split-word';
+                            
+                            const chars = word.split('');
+                            chars.forEach(char => {
+                                const charSpan = document.createElement('span');
+                                charSpan.className = 'split-char';
+                                charSpan.innerText = char;
+                                span.appendChild(charSpan);
+                            });
+                            
+                            element.appendChild(span);
+                        }
+                    });
+                } else if (node.nodeType === Node.ELEMENT_NODE) {
+                    const clonedElement = node.cloneNode(false);
+                    splitText(node);
+                    while(node.firstChild) {
+                        clonedElement.appendChild(node.firstChild);
+                    }
+                    element.appendChild(clonedElement);
+                }
+            });
+        }
+
+        // Split hero title
+        const heroTitle = document.getElementById("hero-title");
+        if (heroTitle) {
+            splitText(heroTitle);
+        }
+
+        // Split all section titles
+        const sectionTitles = document.querySelectorAll("section h2.text-hpi-green");
+        sectionTitles.forEach(title => splitText(title));
+
+        // Register GSAP ScrollTrigger
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Entrance animation: Split text entry for hero title (plays immediately on load)
+        if (heroTitle) {
+            gsap.from("#hero-title .split-char", {
+                y: 80,
+                opacity: 0,
+                rotateX: 45,
+                duration: 1.2,
+                stagger: 0.03,
+                ease: "power4.out"
+            });
+        }
+
+        // Timeline for the hero transition to the welcome section
+        const tl = gsap.timeline({
+            scrollTrigger: {
+                trigger: "#hero-section",
+                start: "top top",
+                end: "+=100%",
+                pin: true,
+                scrub: 1.2,
+                snap: {
+                    snapTo: 1,
+                    duration: { min: 0.6, max: 1.0 },
+                    ease: "power2.inOut"
+                }
+            }
+        });
+
+        // Curved transition path animation (morphing up with inverted/flipped curve)
+        tl.to("#curve-path", {
+            attr: { d: "M 0 15 Q 50 65 100 15 L 100 100 L 0 100 Z" },
+            ease: "none"
+        }, 0)
+        .to("#curve-path", {
+            attr: { d: "M 0 0 Q 50 0 100 0 L 100 100 L 0 100 Z" },
+            ease: "none"
+        }, 0.5);
+
+        // Fade out and move up the hero content as a whole on scroll
+        tl.to("#hero-content", {
+            opacity: 0,
+            y: -100,
+            scale: 0.95,
+            ease: "power1.out"
+        }, 0);
+
+        // Heading Titles scroll triggered entrance animation
+        sectionTitles.forEach(title => {
+            const chars = title.querySelectorAll(".split-char");
+            if (chars.length > 0) {
+                gsap.from(chars, {
+                    scrollTrigger: {
+                        trigger: title,
+                        start: "top 85%",
+                        toggleActions: "play reverse play reverse"
+                    },
+                    y: 40,
+                    opacity: 0,
+                    rotateX: 30,
+                    duration: 0.8,
+                    stagger: 0.015,
+                    ease: "power3.out"
+                });
+            }
+        });
+
+        // Bridge Card Fanning Animation
+        let mm = gsap.matchMedia();
+
+        // Desktop Layout
+        mm.add("(min-width: 768px)", () => {
+            gsap.timeline({
+                scrollTrigger: {
+                    trigger: "#destinasi-card-container",
+                    start: "top 95%",
+                    end: "bottom 15%",
+                    scrub: 1.2,
+                }
+            })
+            .fromTo(".destinasi-card", 
+                { xPercent: -50, yPercent: -50, x: 0, y: 0, rotation: 0 },
+                {
+                    xPercent: -50,
+                    yPercent: -50,
+                    x: (i) => (i - 2) * 160,
+                    y: (i) => Math.abs(i - 2) * 20,
+                    rotation: (i) => (i - 2) * 10,
+                    ease: "power2.out"
+                }
+            );
+        });
+
+        // Mobile Layout
+        mm.add("(max-width: 767px)", () => {
+            gsap.timeline({
+                scrollTrigger: {
+                    trigger: "#destinasi-card-container",
+                    start: "top 95%",
+                    end: "bottom 10%",
+                    scrub: 1.2,
+                }
+            })
+            .fromTo(".destinasi-card", 
+                { xPercent: -50, yPercent: -50, x: 0, y: 0, rotation: 0 },
+                {
+                    xPercent: -50,
+                    yPercent: -50,
+                    x: (i) => (i - 2) * 45,
+                    y: (i) => Math.abs(i - 2) * 8,
+                    rotation: (i) => (i - 2) * 6,
+                    ease: "power2.out"
+                }
+            );
+        });
+
         // Mencegah animasi macet di HP karena scroll yang terlalu cepat
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -318,8 +582,8 @@
                 }
             });
         }, { 
-            threshold: 0.05, // Dikurangi sedikit agar lebih cepat muncul di HP
-            rootMargin: "0px 0px -20px 0px" // Margin lebih kecil untuk layar sempit
+            threshold: 0.05, 
+            rootMargin: "0px 0px -20px 0px" 
         });
 
         document.querySelectorAll('.reveal-on-scroll').forEach((el) => {
@@ -334,5 +598,16 @@
     .is-visible { opacity: 1 !important; transform: translateY(0) !important; }
     /* Memastikan x-cloak alpine tidak terlihat saat render pertama kali */
     [x-cloak] { display: none !important; }
+
+    /* GSAP Split Text styles */
+    .split-word {
+        display: inline-block;
+        white-space: nowrap;
+    }
+    .split-char {
+        display: inline-block;
+        will-change: transform, opacity;
+        transform-origin: center bottom;
+    }
 </style>
 @endsection
