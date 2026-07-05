@@ -211,7 +211,7 @@
     <div class="max-w-4xl mx-auto px-6">
         <h2 class="text-2xl md:text-3xl font-bold text-center mb-10 md:mb-14 text-hpi-green">{{ $locale == 'id' ? 'Kegiatan Mendatang' : 'Upcoming Events' }}</h2>
         <div class="space-y-6 mb-8 md:mb-10">
-            @foreach(\App\Models\KegiatanBerita::where('tipe', 'Kegiatan')->orderBy('tanggal_kegiatan', 'asc')->limit(3)->get() as $kegiatan)
+            @foreach(\App\Models\KegiatanBerita::published()->kegiatan()->where('tanggal_kegiatan', '>=', now())->orderBy('tanggal_kegiatan', 'asc')->limit(3)->get() as $kegiatan)
             <div class="flex flex-row items-center gap-4 md:gap-6 p-2 reveal-on-scroll">
                 <!-- Box Tanggal Mobile Friendly -->
                 <div class="text-center shrink-0 border-r border-gray-300 pr-4 md:pr-8">
