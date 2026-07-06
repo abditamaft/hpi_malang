@@ -165,7 +165,25 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
             @foreach(\App\Models\Keunggulan::all() as $item)
             <div class="bg-white p-6 md:p-8 rounded-2xl border border-gray-200 hover:shadow-lg transition-shadow reveal-on-scroll">
-                <div class="text-hpi-green mb-4 md:mb-5 w-10 h-10 [&>svg]:w-full [&>svg]:h-full">{!! $item->ikon !!}</div>
+                <div class="text-hpi-green mb-4 md:mb-5 w-10 h-10 [&>svg]:w-full [&>svg]:h-full flex items-center justify-start text-3xl">
+                    @if(str_starts_with(trim($item->ikon), '<'))
+                        {!! $item->ikon !!}
+                    @else
+                        @php
+                            $iconClass = trim($item->ikon);
+                            if ($iconClass) {
+                                if (!str_starts_with($iconClass, 'fa')) {
+                                    $iconClass = 'fa-solid fa-' . $iconClass;
+                                } elseif (!str_contains($iconClass, ' ')) {
+                                    $iconClass = 'fa-solid ' . $iconClass;
+                                }
+                            }
+                        @endphp
+                        @if($iconClass)
+                            <i class="{{ $iconClass }}"></i>
+                        @endif
+                    @endif
+                </div>
                 <h4 class="font-bold text-base md:text-lg text-gray-900 mb-2 md:mb-3">{{ $locale == 'id' ? $item->judul_id : $item->judul_en }}</h4>
                 <p class="text-xs md:text-sm text-gray-600 leading-relaxed">{{ $locale == 'id' ? $item->deskripsi_id : $item->deskripsi_en }}</p>
             </div>
