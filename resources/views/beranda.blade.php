@@ -74,54 +74,73 @@
 </section>
 
 <!-- 2. WELCOME SECTION (Teks Sambutan Dinamis dari web_settings) -->
-<section class="py-16 md:py-24 bg-white overflow-hidden">
-    <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-12 gap-8 md:gap-12 items-center">
+<section id="welcome-section" class="pt-24 md:pt-28 pb-16 bg-white overflow-hidden min-h-[80vh] md:min-h-screen flex items-center">
+    <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-12 gap-8 md:gap-12 items-center w-full">
         <!-- Foto Ketua -->
-        <div class="md:col-span-4 flex justify-center reveal-on-scroll">
-            <div class="w-48 h-48 md:w-64 md:h-64 rounded-full overflow-hidden border-4 border-gray-100 shadow-lg">
+        <div class="md:col-span-4 flex justify-center">
+            <div class="relative overflow-hidden rounded-2xl w-48 h-48 md:w-64 md:h-64 shadow-lg border-4 border-gray-100 bg-white">
                 <!-- Foto ketua masih hardcode karena struktur_organisasi tidak memiliki kolom foto -->
-                <img src="https://source.unsplash.com/400x400/?portrait,man" alt="Ketua HPI" class="w-full h-full object-cover">
+                <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=400&h=400&q=80" alt="Ketua HPI" class="w-full h-full object-cover welcome-image">
+                <!-- SVG Curtain overlay -->
+                <svg class="absolute inset-0 w-full h-full z-10 pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none">
+                    <path class="welcome-curtain" d="M 0 0 H 100 V 100 H 0 Z" fill="white" />
+                </svg>
             </div>
         </div>
         
         <!-- Teks Sambutan & Nama -->
-        <div class="md:col-span-8 reveal-on-scroll delay-100 text-center md:text-left">
+        <div class="md:col-span-8 text-center md:text-left welcome-text-container">
             <span class="text-5xl md:text-6xl text-yellow-400 font-serif leading-none block mb-2 md:mb-0 md:inline-block">"</span>
             
-            <h2 class="text-2xl md:text-3xl font-bold mb-4 md:mb-6 mt-2 text-gray-900 leading-tight">
+            <h2 class="text-2xl md:text-3xl font-bold mb-4 md:mb-6 mt-2 text-gray-900 leading-tight welcome-title">
                 "{{ $settings && ($locale == 'id' ? $settings->teks_sambutan_id : $settings->teks_sambutan_en) 
                     ? ($locale == 'id' ? $settings->teks_sambutan_id : $settings->teks_sambutan_en) 
                     : ($locale == 'id' ? 'Selamat datang di gerbang pariwisata profesional Kabupaten Malang.' : 'Welcome to the gate of professional tourism in Malang Regency.') }}"
             </h2>
             
-            <p class="text-sm md:text-base text-gray-600 mb-6 md:mb-8 leading-relaxed">
+            <p class="text-sm md:text-base text-gray-600 mb-6 md:mb-8 leading-relaxed welcome-desc">
                 {{ $locale == 'id' ? 'Kami hadir tidak hanya sebagai penunjuk jalan, tetapi sebagai pencerita yang membawa setiap tamu menyelami kedalaman budaya dan keindahan alam Malang. Komitmen kami adalah memberikan standar pelayanan prima yang berintegritas, memastikan setiap perjalanan menjadi pengalaman yang bermakna dan tak terlupakan.' : 'We are here not just as guides, but as storytellers bringing guests into the depth of Malang\'s culture and beauty...' }}
             </p>
             
-            <h4 class="font-bold text-base md:text-lg text-gray-900">{{ $ketua ? $ketua->nama : 'Aris Rahma Cita Wimanda' }}</h4>
-            <p class="text-xs md:text-sm text-gray-500 font-medium uppercase tracking-wide">{{ $ketua ? ($locale == 'id' ? $ketua->jabatan_id : $ketua->jabatan_en) : 'Ketua HPI Kabupaten Malang' }}</p>
+            <h4 class="font-bold text-base md:text-lg text-gray-900 welcome-author">{{ $ketua ? $ketua->nama : 'Aris Rahma Cita Wimanda' }}</h4>
+            <p class="text-xs md:text-sm text-gray-500 font-medium uppercase tracking-wide welcome-role">{{ $ketua ? ($locale == 'id' ? $ketua->jabatan_id : $ketua->jabatan_en) : 'Ketua HPI Kabupaten Malang' }}</p>
         </div>
     </div>
 </section>
 
 <!-- 3. TENTANG KAMI SECTION -->
-<section class="py-16 md:py-24 bg-gray-50 overflow-hidden">
-    <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-10 md:gap-16 items-center">
+<section id="about-section" class="pt-24 md:pt-28 pb-16 bg-gray-50 overflow-hidden min-h-[80vh] md:min-h-screen flex items-center">
+    <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-10 md:gap-16 items-center w-full pt-16 md:pt-24">
         <!-- Gambar (Sembunyikan salah satu di HP agar tidak terlalu memakan tempat) -->
-        <div class="flex gap-4 items-center justify-center reveal-on-scroll">
-            <img src="https://source.unsplash.com/400x500/?guide,tour" class="w-1/2 rounded-2xl shadow-md object-cover h-64 md:h-80">
-            <img src="https://source.unsplash.com/400x600/?tea,plantation" class="hidden md:block w-1/2 rounded-2xl shadow-lg object-cover h-96 -mt-10">
+        <div class="flex gap-4 items-center justify-center">
+            <!-- Image 1 -->
+            <div class="relative overflow-hidden rounded-2xl w-1/2 aspect-[4/5] shadow-md bg-white">
+                <img src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=400&h=500&q=80" class="w-full h-full object-cover about-image-1">
+                <!-- SVG Curtain overlay 1 -->
+                <svg class="absolute inset-0 w-full h-full z-10 pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none">
+                    <path class="about-curtain-1" d="M 0 0 H 100 V 100 H 0 Z" fill="#f9fafb" />
+                </svg>
+            </div>
+            <!-- Image 2 -->
+            <div class="hidden md:block relative overflow-hidden rounded-2xl w-1/2 aspect-[4/6] shadow-lg bg-white -mt-10">
+                <img src="https://images.unsplash.com/photo-1530789253388-582c481c54b0?auto=format&fit=crop&w=400&h=600&q=80" class="w-full h-full object-cover about-image-2">
+                <!-- SVG Curtain overlay 2 -->
+                <svg class="absolute inset-0 w-full h-full z-10 pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none">
+                    <path class="about-curtain-2" d="M 0 0 H 100 V 100 H 0 Z" fill="#f9fafb" />
+                </svg>
+            </div>
         </div>
-        <div class="reveal-on-scroll delay-100 text-center md:text-left">
+        <div class="about-text-container text-center md:text-left">
             <p class="text-xs md:text-sm font-bold text-gray-500 tracking-widest uppercase mb-2">{{ $locale == 'id' ? 'TENTANG KAMI' : 'ABOUT US' }}</p>
-            <h2 class="text-3xl md:text-4xl font-bold text-hpi-green mb-4 md:mb-6 leading-tight">
+            <h2 class="text-3xl md:text-4xl font-bold text-hpi-green mb-4 md:mb-6 leading-tight about-title">
                 {{ $settings ? ($locale == 'id' ? $settings->judul_tentang_kami_id : $settings->judul_tentang_kami_en) : 'Melayani dengan Hati, Membangun Pariwisata Malang' }}
             </h2>
-            <p class="text-sm md:text-base text-gray-600 mb-8 md:mb-10 leading-relaxed">
+            <p class="text-sm md:text-base text-gray-600 mb-8 md:mb-10 leading-relaxed about-desc">
                 {{ $settings ? ($locale == 'id' ? $settings->deskripsi_tentang_kami_id : $settings->deskripsi_tentang_kami_en) : 'Himpunan Pramuwisata Indonesia (HPI) Kabupaten Malang adalah wadah resmi bagi para pemandu wisata profesional...' }}
             </p>
+            <p class="hidden about-subtitle">{{ $settings ? ($locale == 'id' ? $settings->deskripsi_tentang_kami_id : $settings->deskripsi_tentang_kami_en) : 'Himpunan Pramuwisata Indonesia (HPI) Kabupaten Malang adalah wadah resmi bagi para pemandu wisata profesional...' }}</p>
             <!-- Stats -->
-            <div class="grid grid-cols-3 gap-2 md:gap-4">
+            <div class="grid grid-cols-3 gap-2 md:gap-4 about-stats">
                 <div class="bg-white p-4 md:p-6 rounded-xl md:rounded-2xl shadow-sm text-center border border-gray-100">
                     <h3 class="text-2xl md:text-3xl font-bold text-hpi-green mb-1">{{\App\Models\Pramuwisata::count()}}+</h3>
                     <p class="text-[10px] md:text-xs font-semibold text-gray-500 uppercase">{{ $locale == 'id' ? 'Anggota' : 'Members' }}</p>
@@ -195,7 +214,7 @@
             }
         </style>
         <div id="destinasi-card-container">
-            @foreach(\App\Models\Destinasi::limit(5)->get() as $index => $destinasi)
+            @foreach(\App\Models\Destinasi::where('nama_destinasi_id', '!=', '__kategori_placeholder__')->orderBy('is_unggulan', 'desc')->orderBy('dibuat_pada', 'desc')->limit(5)->get() as $index => $destinasi)
             <div class="destinasi-card" style="z-index: {{ 10 + $index }}">
                 @if($destinasi->url_gambar)
                     <img src="{{ asset('storage/' . $destinasi->url_gambar) }}" class="w-full h-full object-cover">
@@ -504,24 +523,127 @@
             ease: "power1.out"
         }, 0);
 
-        // Heading Titles scroll triggered entrance animation
-        sectionTitles.forEach(title => {
-            const chars = title.querySelectorAll(".split-char");
-            if (chars.length > 0) {
-                gsap.from(chars, {
-                    scrollTrigger: {
-                        trigger: title,
-                        start: "top 85%",
-                        toggleActions: "play reverse play reverse"
-                    },
-                    y: 40,
-                    opacity: 0,
-                    rotateX: 30,
-                    duration: 0.8,
-                    stagger: 0.015,
-                    ease: "power3.out"
-                });
-            }
+        // Helper function to split text into lines dynamically
+        function splitTextIntoLines(element) {
+            if (!element) return;
+            const text = element.innerText;
+            const words = text.split(' ');
+            element.innerHTML = words.map(word => `<span class="temp-word" style="display: inline-block;">${word}</span>`).join(' ');
+            
+            const wordSpans = element.querySelectorAll('.temp-word');
+            const lines = {};
+            wordSpans.forEach(span => {
+                const top = span.offsetTop;
+                if (!lines[top]) {
+                    lines[top] = [];
+                }
+                lines[top].push(span.innerText);
+            });
+            
+            let newHTML = '';
+            Object.keys(lines).sort((a, b) => a - b).forEach(top => {
+                const lineText = lines[top].join(' ');
+                newHTML += `<div class="line-mask" style="overflow:hidden; display:block;"><span class="line-content" style="display:inline-block; transform:translateY(100%); transition: none;">${lineText}</span></div>`;
+            });
+            element.innerHTML = newHTML;
+        }
+
+        // Welcome & About Scroll Animations
+        let mmWelcome = gsap.matchMedia();
+        
+        // Desktop Welcome & About (Pin, Curtain, Split Lines)
+        mmWelcome.add("(min-width: 768px)", () => {
+            // Apply line splitting for Welcome Section
+            const sec2Title = document.querySelector(".welcome-title");
+            const sec2Desc = document.querySelector(".welcome-desc");
+            const sec2Author = document.querySelector(".welcome-author");
+            const sec2Role = document.querySelector(".welcome-role");
+            splitTextIntoLines(sec2Title);
+            splitTextIntoLines(sec2Desc);
+            splitTextIntoLines(sec2Author);
+            splitTextIntoLines(sec2Role);
+
+            // Apply line splitting for About Section
+            const sec3Title = document.querySelector(".about-title");
+            const sec3Desc = document.querySelector(".about-desc");
+            const sec3Subtitle = document.querySelector(".about-subtitle");
+            splitTextIntoLines(sec3Title);
+            splitTextIntoLines(sec3Desc);
+            splitTextIntoLines(sec3Subtitle);
+
+            // Welcome Section Timeline (Desktop)
+            let tlSec2 = gsap.timeline({
+                scrollTrigger: {
+                    trigger: "#welcome-section",
+                    start: "top top",
+                    end: "+=150%",
+                    pin: true,
+                    scrub: 1,
+                    anticipatePin: 1
+                }
+            });
+            tlSec2
+                // 1. Reveal Image (SVG curtain morphs to right side / zero width)
+                .to(".welcome-curtain", { attr: { d: "M 100 0 H 100 V 100 H 100 Z" }, duration: 1.5, ease: "power2.inOut" })
+                // 2. Reveal Text by lines
+                .to("#welcome-section .line-content", { y: "0%", stagger: 0.1, duration: 1.2, ease: "power3.out" }, "-=1")
+                // 3. Hide Text (starts 1.5s after text reveal finishes to hold the POV)
+                .to("#welcome-section .line-content", { y: "100%", stagger: 0.05, duration: 0.8, ease: "power3.in" }, "+=1.5")
+                // 4. Close Image Curtain (covers the image again)
+                .to(".welcome-curtain", { attr: { d: "M 0 0 H 100 V 100 H 0 Z" }, duration: 1, ease: "power2.inOut" }, "-=0.5");
+
+            // About Section Timeline (Desktop)
+            let tlSec3 = gsap.timeline({
+                scrollTrigger: {
+                    trigger: "#about-section",
+                    start: "top top",
+                    end: "+=150%",
+                    pin: true,
+                    scrub: 1,
+                    anticipatePin: 1
+                }
+            });
+            tlSec3
+                // 1. Reveal both image curtains
+                .to([".about-curtain-1", ".about-curtain-2"], { attr: { d: "M 100 0 H 100 V 100 H 100 Z" }, duration: 1.5, ease: "power2.inOut" })
+                // 2. Reveal Text by lines
+                .to("#about-section .line-content", { y: "0%", stagger: 0.08, duration: 1.2, ease: "power3.out" }, "-=1")
+                // 3. Reveal Stats cards
+                .from(".about-stats > div", { opacity: 0, scale: 0.9, y: 20, stagger: 0.1, duration: 0.8, ease: "power2.out" }, "-=0.8")
+                // 4. Hide Stats (starts 1.5s after stats reveal finishes to hold the POV)
+                .to(".about-stats > div", { opacity: 0, scale: 0.9, y: 20, stagger: 0.05, duration: 0.6, ease: "power2.in" }, "+=1.5")
+                // 5. Hide Text
+                .to("#about-section .line-content", { y: "100%", stagger: 0.05, duration: 0.8, ease: "power3.in" }, "-=0.4")
+                // 6. Close curtains
+                .to([".about-curtain-1", ".about-curtain-2"], { attr: { d: "M 0 0 H 100 V 100 H 0 Z" }, duration: 1, ease: "power2.inOut" }, "-=0.5");
+        });
+
+        // Mobile Welcome & About (Simple scroll-triggered reveals, no layout distortion)
+        mmWelcome.add("(max-width: 767px)", () => {
+            // Welcome Section (Mobile)
+            let tlSec2Mob = gsap.timeline({
+                scrollTrigger: {
+                    trigger: "#welcome-section",
+                    start: "top 75%",
+                    toggleActions: "play none none none"
+                }
+            });
+            tlSec2Mob
+                .to(".welcome-curtain", { attr: { d: "M 100 0 H 100 V 100 H 100 Z" }, duration: 1.2, ease: "power2.inOut" })
+                .from(".welcome-text-container", { opacity: 0, y: 30, duration: 1.0, ease: "power3.out" }, "-=0.8");
+
+            // About Section (Mobile)
+            let tlSec3Mob = gsap.timeline({
+                scrollTrigger: {
+                    trigger: "#about-section",
+                    start: "top 75%",
+                    toggleActions: "play none none none"
+                }
+            });
+            tlSec3Mob
+                .to([".about-curtain-1", ".about-curtain-2"], { attr: { d: "M 100 0 H 100 V 100 H 100 Z" }, duration: 1.2, ease: "power2.inOut" })
+                .from(".about-text-container", { opacity: 0, y: 30, duration: 1.0, ease: "power3.out" }, "-=0.8")
+                .from(".about-stats > div", { opacity: 0, scale: 0.9, y: 15, stagger: 0.08, duration: 0.6, ease: "power2.out" }, "-=0.6");
         });
 
         // Bridge Card Fanning Animation
@@ -591,6 +713,29 @@
             el.classList.add('opacity-0', 'translate-y-8', 'md:translate-y-12', 'transition-all', 'duration-[800ms]', 'md:duration-[1000ms]', 'ease-out');
             observer.observe(el);
         });
+
+        // Heading Titles scroll triggered entrance animation (initialized after pinning setup)
+        sectionTitles.forEach(title => {
+            const chars = title.querySelectorAll(".split-char");
+            if (chars.length > 0) {
+                gsap.from(chars, {
+                    scrollTrigger: {
+                        trigger: title,
+                        start: "top 85%",
+                        toggleActions: "play reverse play reverse"
+                    },
+                    y: 40,
+                    opacity: 0,
+                    rotateX: 30,
+                    duration: 0.8,
+                    stagger: 0.015,
+                    ease: "power3.out"
+                });
+            }
+        });
+
+        // Refresh ScrollTrigger to recalculate all trigger positions correctly
+        ScrollTrigger.refresh();
     });
 </script>
 <style>
@@ -608,6 +753,17 @@
         display: inline-block;
         will-change: transform, opacity;
         transform-origin: center bottom;
+    }
+
+    /* Line animation styles */
+    .line-mask {
+        overflow: hidden !important;
+        display: block !important;
+    }
+    .line-content {
+        display: inline-block !important;
+        transform: translateY(100%);
+        will-change: transform;
     }
 </style>
 @endsection
