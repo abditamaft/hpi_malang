@@ -149,4 +149,63 @@
         </div>
     </section>
 </div>
+<!-- Load GSAP CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Character splitter helper
+        function splitTextByChars(element) {
+            if (!element) return [];
+            const text = element.textContent.trim();
+            element.innerHTML = '';
+            
+            return [...text].map(char => {
+                const span = document.createElement('span');
+                if (char === ' ') {
+                    span.innerHTML = '&nbsp;';
+                } else {
+                    span.textContent = char;
+                }
+                span.style.display = 'inline-block';
+                span.style.opacity = '0';
+                span.style.transform = 'translateY(15px)';
+                element.appendChild(span);
+                return span;
+            });
+        }
+
+        // ================= ENTRANCE ANIMATIONS =================
+        const h1 = document.querySelector("h1");
+        const p = document.querySelector("section.pt-16 p");
+        const sidebar = document.querySelector("aside");
+        const cards = document.querySelectorAll(".lg\\:col-span-3 .grid > a");
+
+        const charsH1 = splitTextByChars(h1);
+        const charsP = splitTextByChars(p);
+
+        const entranceTimeline = gsap.timeline();
+        
+        if (charsH1.length > 0) {
+            entranceTimeline.to(charsH1, { opacity: 1, y: 0, stagger: 0.012, duration: 0.5, ease: "power2.out" }, 0.1);
+        }
+        if (charsP.length > 0) {
+            entranceTimeline.to(charsP, { opacity: 1, y: 0, stagger: 0.002, duration: 0.5, ease: "power2.out" }, 0.3);
+        }
+        if (sidebar) {
+            gsap.set(sidebar, { opacity: 0, x: -30 });
+            entranceTimeline.to(sidebar, { opacity: 1, x: 0, duration: 0.6, ease: "power2.out" }, 0.4);
+        }
+        if (cards.length > 0) {
+            gsap.set(cards, { opacity: 0, y: 30 });
+            entranceTimeline.to(cards, {
+                opacity: 1,
+                y: 0,
+                stagger: 0.1,
+                duration: 0.8,
+                ease: "power2.out"
+            }, 0.5);
+        }
+    });
+</script>
 @endsection

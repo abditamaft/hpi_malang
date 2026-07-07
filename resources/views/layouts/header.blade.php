@@ -13,10 +13,10 @@
         <a href="/" class="flex items-center gap-2 shrink-0">
             @if(isset($settings) && $settings->logo_header)
                 <img src="{{ asset('storage/'.$settings->logo_header) }}" alt="Logo HPI" 
-                     class="transition-all duration-700 ease-in-out"
+                     class="h-8 transition-all duration-700 ease-in-out"
                      :class="scrolled ? 'h-10' : 'h-8'">
             @else
-                <span class="font-bold text-hpi-green tracking-tight transition-all duration-700"
+                <span class="text-xl font-bold text-hpi-green tracking-tight transition-all duration-700"
                       :class="scrolled ? 'text-2xl' : 'text-xl'">HPI Kab. Malang</span>
             @endif
         </a>

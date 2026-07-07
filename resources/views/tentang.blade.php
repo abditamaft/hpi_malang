@@ -25,17 +25,114 @@
         position: relative;
         overflow: hidden;
     }
+
+    /* Scroll indicator styles */
+    .scroll-indicator-container {
+        position: fixed;
+        right: 2rem;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 50;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        pointer-events: none;
+    }
+    @media (max-width: 768px) {
+        .scroll-indicator-container {
+            display: none !important;
+        }
+    }
+    .scroll-indicator-track-wrapper {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: 180px;
+        width: 24px;
+        pointer-events: auto;
+    }
+    .scroll-indicator-track {
+        position: absolute;
+        top: 10px;
+        bottom: 10px;
+        width: 2px;
+        background-color: #e5e7eb; /* gray-200 */
+        border-radius: 9999px;
+    }
+    .scroll-indicator-progress {
+        position: absolute;
+        top: 10px;
+        width: 2px;
+        background-color: #005344; /* hpi green */
+        border-radius: 9999px;
+        height: 0%;
+        transition: height 0.1s ease;
+    }
+    .scroll-indicator-dot {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        border: 2px solid #d1d5db; /* gray-300 */
+        background-color: #ffffff;
+        cursor: pointer;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+    .scroll-indicator-dot::after {
+        content: '';
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background-color: transparent;
+        transition: all 0.3s ease;
+    }
+    /* Active dot styling */
+    .scroll-indicator-dot.active {
+        border-color: #005344;
+    }
+    .scroll-indicator-dot.active::after {
+        background-color: #005344;
+        transform: scale(1.2);
+    }
+    /* Completed dot styling */
+    .scroll-indicator-dot.completed {
+        border-color: #10b981; /* green-500 */
+        background-color: #10b981;
+    }
+    .scroll-indicator-dot.completed::after {
+        content: '✓';
+        color: white;
+        font-size: 10px;
+        font-weight: bold;
+        background-color: transparent;
+        border-radius: 0;
+        width: auto;
+        height: auto;
+        transform: scale(1);
+    }
 </style>
+
+<!-- Scroll Indicator -->
+<div class="scroll-indicator-container hidden md:flex">
+    <div class="scroll-indicator-track-wrapper">
+        <div class="scroll-indicator-track"></div>
+        <div id="scroll-indicator-progress" class="scroll-indicator-progress"></div>
+        <div data-section="1" class="scroll-indicator-dot active" style="top: 0;" title="Intro"></div>
+        <div data-section="2" class="scroll-indicator-dot" style="top: calc(50% - 10px);" title="Visi & Misi"></div>
+        <div data-section="3" class="scroll-indicator-dot" style="bottom: 0;" title="Structure"></div>
+    </div>
+</div>
 
 <!-- SECTION 1: INTRO -->
 <section id="about-section-1" class="relative min-h-screen flex flex-col justify-center items-center px-6 text-center bg-white overflow-hidden">
-    <!-- SVG Transition Overlay Section 1 (Left to Right curve) -->
-    <div class="absolute inset-0 pointer-events-none z-40">
-        <svg class="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
-            <path id="svg-overlay-1" d="M 0 0 L 0 0 Q 0 50 0 100 L 0 100 Z" fill="#ffffff" />
-        </svg>
-    </div>
-    
     <div class="relative z-10 max-w-4xl mx-auto py-20">
         <h1 class="text-3xl md:text-5xl font-extrabold text-gray-900 mb-6 leading-tight">
             {{ session('locale') == 'en' 
@@ -311,25 +408,15 @@
         const charsH1 = splitTextByChars(h1Section1);
         const charsP1 = splitTextByChars(pSection1);
 
-        const tl1 = gsap.timeline({
-            scrollTrigger: {
-                trigger: "#about-section-1",
-                start: "top top",
-                end: "+=220%",
-                pin: true,
-                scrub: 1.2,
-            }
-        });
-
+        // Animasi split text langsung muncul tanpa scroll trigger
+        const tl1 = gsap.timeline();
         if (charsH1.length > 0) {
-            tl1.to(charsH1, { opacity: 1, y: 0, stagger: 0.015, duration: 0.6, ease: "power2.out" }, 0);
+            tl1.to(charsH1, { opacity: 1, y: 0, stagger: 0.015, duration: 0.6, ease: "power2.out" }, 0.1);
         }
         if (charsP1.length > 0) {
-            tl1.to(charsP1, { opacity: 1, y: 0, stagger: 0.003, duration: 0.6, ease: "power2.out" }, 0.2);
+            tl1.to(charsP1, { opacity: 1, y: 0, stagger: 0.003, duration: 0.6, ease: "power2.out" }, 0.3);
         }
 
-        tl1.to("#svg-overlay-1", { attr: { d: "M 0 0 L 50 0 Q 70 50 50 100 L 0 100 Z" }, duration: 0.6, ease: "none" }, 2.0)
-           .to("#svg-overlay-1", { attr: { d: "M 0 0 L 100 0 L 100 100 L 0 100 Z" }, duration: 0.6, ease: "none" }, 2.6);
 
 
         // ================= SECTION 2 ANIMATION =================
@@ -384,6 +471,86 @@
         if (charsP3.length > 0) tl3.to(charsP3, { opacity: 1, y: 0, stagger: 0.003, duration: 0.6, ease: "power2.out" }, 0.2);
         if (gridSection3) tl3.to(gridSection3, { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }, 0.3);
         if (cardSection3) tl3.to(cardSection3, { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }, 0.5);
+
+        // ================= SCROLL INDICATOR LOGIC =================
+        const progressLine = document.querySelector("#scroll-indicator-progress");
+        const dots = document.querySelectorAll(".scroll-indicator-dot");
+
+        function setActiveIndicator(index, progress) {
+            dots.forEach((dot, idx) => {
+                dot.classList.remove("active", "completed");
+                if (idx < index) {
+                    dot.classList.add("completed");
+                } else if (idx === index) {
+                    dot.classList.add("active");
+                }
+            });
+
+            let overallProgress = 0;
+            if (index === 0) {
+                overallProgress = progress * 50;
+            } else if (index === 1) {
+                overallProgress = 50 + (progress * 50);
+            } else if (index >= 2) {
+                overallProgress = 100;
+            }
+            progressLine.style.height = `${overallProgress}%`;
+        }
+
+        // Track Section 1
+        ScrollTrigger.create({
+            trigger: "#about-section-1",
+            start: "top top",
+            end: "bottom top",
+            onUpdate: (self) => {
+                if (self.isActive) {
+                    setActiveIndicator(0, self.progress);
+                }
+            },
+            onLeaveBack: () => {
+                setActiveIndicator(0, 0);
+            }
+        });
+
+        // Track Section 2
+        ScrollTrigger.create({
+            trigger: "#about-section-2",
+            start: "top top",
+            end: "+=250%",
+            onUpdate: (self) => {
+                if (self.isActive) {
+                    setActiveIndicator(1, self.progress);
+                }
+            }
+        });
+
+        // Track Section 3
+        ScrollTrigger.create({
+            trigger: "#about-section-3",
+            start: "top top",
+            end: "+=120%",
+            onUpdate: (self) => {
+                if (self.isActive) {
+                    setActiveIndicator(2, self.progress);
+                }
+            }
+        });
+
+        // Dot click handler for smooth scrolling
+        dots.forEach((dot, idx) => {
+            dot.addEventListener("click", () => {
+                const targetIds = ["about-section-1", "about-section-2", "about-section-3"];
+                const targetId = targetIds[idx];
+                const st = ScrollTrigger.getAll().find(st => st.trigger && st.trigger.id === targetId);
+                
+                if (st) {
+                    window.scrollTo({
+                        top: st.start + 5,
+                        behavior: "smooth"
+                    });
+                }
+            });
+        });
     });
 </script>
 @endsection

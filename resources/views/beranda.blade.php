@@ -365,6 +365,11 @@
             </div>
             @endforeach
         </div>
+        <div id="destinasi-card-description" class="text-center max-w-2xl mx-auto mt-6 mb-12 text-sm md:text-base text-gray-500 leading-relaxed font-medium">
+            {{ $locale == 'id' 
+                ? 'Setiap destinasi memiliki cerita. Biarkan pemandu profesional kami membawa Anda menyelami keindahan dan sejarah di baliknya.' 
+                : 'Every destination has a story. Let our professional guides take you deep into the beauty and history behind it.' }}
+        </div>
         <div class="text-center mt-12 relative z-30">
             <a href="/destinasi" class="inline-flex items-center gap-2 bg-hpi-green hover:bg-emerald-950 text-white font-bold py-3 px-8 rounded-full transition shadow-md hover:shadow-lg">
                 {{ $locale == 'id' ? 'Lihat Semua Destinasi' : 'View All Destinations' }} &rarr;
@@ -845,6 +850,19 @@
             rootMargin: "0px 0px -20px 0px" 
         });
 
+        // Automatically add reveal-on-scroll class to components that don't have animations yet
+        const unanimatedElements = document.querySelectorAll(
+            'section:not(#hero-section):not(#welcome-section):not(#about-section):not(#destinasi-card-container) > div:not(.reveal-on-scroll), ' +
+            'section:not(#hero-section):not(#welcome-section):not(#about-section):not(#destinasi-card-container) .grid > div:not(.reveal-on-scroll), ' +
+            'section:not(#hero-section):not(#welcome-section):not(#about-section):not(#destinasi-card-container) > .text-center:not(.reveal-on-scroll)'
+        );
+        
+        unanimatedElements.forEach((el) => {
+            if (!el.classList.contains('reveal-on-scroll') && !el.closest('.reveal-on-scroll')) {
+                el.classList.add('reveal-on-scroll');
+            }
+        });
+
         document.querySelectorAll('.reveal-on-scroll').forEach((el) => {
             // Animasi halus fade in up
             el.classList.add('opacity-0', 'translate-y-8', 'md:translate-y-12', 'transition-all', 'duration-[800ms]', 'md:duration-[1000ms]', 'ease-out');
@@ -870,6 +888,27 @@
                 });
             }
         });
+
+        // Animasi split teks untuk deskripsi destinasi wisata
+        const destinasiDesc = document.getElementById("destinasi-card-description");
+        if (destinasiDesc) {
+            splitText(destinasiDesc);
+            const charsDesc = destinasiDesc.querySelectorAll(".split-char");
+            if (charsDesc.length > 0) {
+                gsap.from(charsDesc, {
+                    scrollTrigger: {
+                        trigger: destinasiDesc,
+                        start: "top 90%",
+                        toggleActions: "play none none none"
+                    },
+                    y: 15,
+                    opacity: 0,
+                    duration: 0.6,
+                    stagger: 0.008,
+                    ease: "power2.out"
+                });
+            }
+        }
 
         // Refresh ScrollTrigger to recalculate all trigger positions correctly
         ScrollTrigger.refresh();

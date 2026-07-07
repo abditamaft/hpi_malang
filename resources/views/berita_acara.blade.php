@@ -133,4 +133,100 @@
         </div>
     </section>
 </div>
+<!-- Load GSAP CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Character splitter helper
+        function splitTextByChars(element) {
+            if (!element) return [];
+            const text = element.textContent.trim();
+            element.innerHTML = '';
+            
+            return [...text].map(char => {
+                const span = document.createElement('span');
+                if (char === ' ') {
+                    span.innerHTML = '&nbsp;';
+                } else {
+                    span.textContent = char;
+                }
+                span.style.display = 'inline-block';
+                span.style.opacity = '0';
+                span.style.transform = 'translateY(15px)';
+                element.appendChild(span);
+                return span;
+            });
+        }
+
+        // ================= ENTRANCE ANIMATIONS =================
+        const badge = document.querySelector("p.text-emerald-600");
+        const h1 = document.querySelector("h1");
+        const p = document.querySelector("h1 + p") || document.querySelector("p.text-gray-500");
+        
+        const headings = document.querySelectorAll("h2");
+        const headingTexts = document.querySelectorAll("h2 + p");
+        const scrollBtns = document.querySelector(".sm\\:flex.items-center.gap-2");
+        const pagination = document.querySelector(".mt-12");
+
+        const eventCards = document.querySelectorAll("#kegiatan-scroll > a");
+        const newsCards = document.querySelectorAll("article");
+
+        const charsH1 = splitTextByChars(h1);
+        const charsP = splitTextByChars(p);
+
+        const entranceTimeline = gsap.timeline();
+        
+        if (badge) {
+            gsap.set(badge, { opacity: 0, y: -10 });
+            entranceTimeline.to(badge, { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" }, 0);
+        }
+
+        if (charsH1.length > 0) {
+            entranceTimeline.to(charsH1, { opacity: 1, y: 0, stagger: 0.012, duration: 0.5, ease: "power2.out" }, 0.1);
+        }
+        if (charsP.length > 0) {
+            entranceTimeline.to(charsP, { opacity: 1, y: 0, stagger: 0.002, duration: 0.5, ease: "power2.out" }, 0.3);
+        }
+
+        const otherFades = [];
+        if (headings.length > 0) otherFades.push(...headings);
+        if (headingTexts.length > 0) otherFades.push(...headingTexts);
+        if (scrollBtns) otherFades.push(scrollBtns);
+        if (pagination) otherFades.push(pagination);
+
+        if (otherFades.length > 0) {
+            gsap.set(otherFades, { opacity: 0, y: 15 });
+            entranceTimeline.to(otherFades, {
+                opacity: 1,
+                y: 0,
+                stagger: 0.08,
+                duration: 0.6,
+                ease: "power2.out"
+            }, 0.4);
+        }
+
+        if (eventCards.length > 0) {
+            gsap.set(eventCards, { opacity: 0, y: 30 });
+            entranceTimeline.to(eventCards, {
+                opacity: 1,
+                y: 0,
+                stagger: 0.1,
+                duration: 0.8,
+                ease: "power2.out"
+            }, 0.5);
+        }
+
+        if (newsCards.length > 0) {
+            gsap.set(newsCards, { opacity: 0, y: 30 });
+            entranceTimeline.to(newsCards, {
+                opacity: 1,
+                y: 0,
+                stagger: 0.1,
+                duration: 0.8,
+                ease: "power2.out"
+            }, 0.6);
+        }
+    });
+</script>
 @endsection
