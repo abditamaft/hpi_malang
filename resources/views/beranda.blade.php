@@ -130,33 +130,152 @@
                 </svg>
             </div>
         </div>
+
         <div class="about-text-container text-center md:text-left">
             <p class="text-xs md:text-sm font-bold text-gray-500 tracking-widest uppercase mb-2">{{ $locale == 'id' ? 'TENTANG KAMI' : 'ABOUT US' }}</p>
             <h2 class="text-3xl md:text-4xl font-bold text-hpi-green mb-4 md:mb-6 leading-tight about-title">
                 {{ $settings ? ($locale == 'id' ? $settings->judul_tentang_kami_id : $settings->judul_tentang_kami_en) : 'Melayani dengan Hati, Membangun Pariwisata Malang' }}
             </h2>
-            <p class="text-sm md:text-base text-gray-600 mb-8 md:mb-10 leading-relaxed about-desc">
+            <p class="text-sm md:text-base text-gray-600 mb-8 md:mb-10 leading-relaxed text-justify about-desc">
                 {{ $settings ? ($locale == 'id' ? $settings->deskripsi_tentang_kami_id : $settings->deskripsi_tentang_kami_en) : 'Himpunan Pramuwisata Indonesia (HPI) Kabupaten Malang adalah wadah resmi bagi para pemandu wisata profesional...' }}
             </p>
             <p class="hidden about-subtitle">{{ $settings ? ($locale == 'id' ? $settings->deskripsi_tentang_kami_id : $settings->deskripsi_tentang_kami_en) : 'Himpunan Pramuwisata Indonesia (HPI) Kabupaten Malang adalah wadah resmi bagi para pemandu wisata profesional...' }}</p>
-            <!-- Stats -->
-            <div class="grid grid-cols-3 gap-2 md:gap-4 about-stats">
-                <div class="bg-white p-4 md:p-6 rounded-xl md:rounded-2xl shadow-sm text-center border border-gray-100">
-                    <h3 class="text-2xl md:text-3xl font-bold text-hpi-green mb-1">{{\App\Models\Pramuwisata::count()}}+</h3>
-                    <p class="text-[10px] md:text-xs font-semibold text-gray-500 uppercase">{{ $locale == 'id' ? 'Anggota' : 'Members' }}</p>
-                </div>
-                <div class="bg-white p-4 md:p-6 rounded-xl md:rounded-2xl shadow-sm text-center border border-gray-100">
-                    <h3 class="text-2xl md:text-3xl font-bold text-hpi-green mb-1">20+</h3>
-                    <p class="text-[10px] md:text-xs font-semibold text-gray-500 uppercase">{{ $locale == 'id' ? 'Bahasa' : 'Languages' }}</p>
-                </div>
-                <div class="bg-white p-4 md:p-6 rounded-xl md:rounded-2xl shadow-sm text-center border border-gray-100">
-                    <h3 class="text-2xl md:text-3xl font-bold text-hpi-green mb-1">500+</h3>
-                    <p class="text-[10px] md:text-xs font-semibold text-gray-500 uppercase">{{ $locale == 'id' ? 'Tur/Tahun' : 'Tours/Year' }}</p>
-                </div>
-            </div>
         </div>
     </div>
 </section>
+
+<!-- ================= MULAI PENAMBAHAN KODE BARU ================= -->
+<!-- 3.5 KEKUATAN ORGANISASI & SEJARAH -->
+<section class="py-16 md:py-24 bg-white overflow-hidden border-t border-gray-100 relative">
+
+    <!-- Decorative background glow (green + gold) -->
+    <div class="absolute top-20 left-0 w-72 h-72 bg-[#005344]/[0.04] rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute bottom-20 right-0 w-72 h-72 bg-[#937538]/[0.06] rounded-full blur-3xl pointer-events-none"></div>
+
+    <div class="max-w-7xl mx-auto px-6 relative z-10">
+
+        <!-- Kekuatan Organisasi -->
+        <div class="mb-20">
+            <div class="text-center mb-10 md:mb-14 reveal-on-scroll">
+                <span class="inline-block w-14 h-1 bg-gradient-to-r from-[#005344] to-[#937538] rounded-full mb-4"></span>
+                <h2 class="text-2xl md:text-3xl font-bold text-hpi-green mb-3">{{ $locale == 'id' ? 'Dalam Rangka Kekuatan Organisasi' : 'Organizational Strength' }}</h2>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-8">
+                <!-- 85 Anggota -->
+                <div class="group bg-white p-6 rounded-2xl md:rounded-3xl shadow-sm border border-gray-100 border-t-4 border-t-[#005344] text-center reveal-on-scroll hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                    <h3 class="text-4xl md:text-5xl font-extrabold text-[#005344] mb-2 group-hover:scale-105 transition-transform duration-300">85</h3>
+                    <p class="text-[10px] md:text-xs font-semibold text-gray-500 uppercase tracking-wide">{{ $locale == 'id' ? 'Anggota berlisensi aktif' : 'Active Licensed Members' }}</p>
+                </div>
+                <!-- 1998 Berdiri -->
+                <div class="group bg-white p-6 rounded-2xl md:rounded-3xl shadow-sm border border-gray-100 border-t-4 border-t-[#937538] text-center reveal-on-scroll delay-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                    <h3 class="text-4xl md:text-5xl font-extrabold text-[#937538] mb-2 group-hover:scale-105 transition-transform duration-300">1998</h3>
+                    <p class="text-[10px] md:text-xs font-semibold text-gray-500 uppercase tracking-wide">{{ $locale == 'id' ? 'HPI Nasional berdiri' : 'National HPI Founded' }}</p>
+                </div>
+                <!-- 6 Bahasa -->
+                <div class="group bg-white p-6 rounded-2xl md:rounded-3xl shadow-sm border border-gray-100 border-t-4 border-t-[#005344] text-center reveal-on-scroll delay-200 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                    <h3 class="text-4xl md:text-5xl font-extrabold text-[#005344] mb-2 group-hover:scale-105 transition-transform duration-300">6</h3>
+                    <p class="text-[10px] md:text-xs font-semibold text-gray-500 uppercase tracking-wide">{{ $locale == 'id' ? 'Spesifikasi bahasa tersedia' : 'Available Languages' }}</p>
+                </div>
+                <!-- JATIM Wilayah -->
+                <div class="group bg-white p-6 rounded-2xl md:rounded-3xl shadow-sm border border-gray-100 border-t-4 border-t-[#937538] text-center reveal-on-scroll delay-300 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                    <h3 class="text-4xl md:text-5xl font-extrabold text-[#937538] mb-2 group-hover:scale-105 transition-transform duration-300">JATIM</h3>
+                    <p class="text-[10px] md:text-xs font-semibold text-gray-500 uppercase tracking-wide">{{ $locale == 'id' ? 'Wilayah Kerja Operasional' : 'Operational Area' }}</p>
+                </div>
+            </div>
+
+            <!-- List Bahasa Tersedia -->
+            <div class="max-w-4xl mx-auto bg-gradient-to-br from-gray-50 to-gray-100/60 p-6 md:p-8 rounded-2xl border border-gray-100 reveal-on-scroll">
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-y-5 gap-x-2">
+                    @php
+                        $bahasa = [
+                            ['id' => 'Bahasa Inggris', 'en' => 'English'],
+                            ['id' => 'Bahasa Belanda', 'en' => 'Dutch'],
+                            ['id' => 'Bahasa Indonesia', 'en' => 'Indonesian'],
+                            ['id' => 'Bahasa Prancis', 'en' => 'French'],
+                            ['id' => 'Bahasa Jepang', 'en' => 'Japanese'],
+                            ['id' => 'Bahasa Arab', 'en' => 'Arabic']
+                        ];
+                    @endphp
+                    @foreach($bahasa as $index => $lang)
+                    <div class="flex items-center gap-3 group">
+                        <div class="w-6 h-6 {{ $index % 2 == 0 ? 'bg-[#005344]' : 'bg-[#937538]' }} rounded-full flex items-center justify-center text-white shrink-0 shadow-sm group-hover:scale-110 transition-transform duration-300">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                        </div>
+                        <span class="text-sm font-bold text-gray-700">{{ $locale == 'id' ? $lang['id'] : $lang['en'] }}</span>
+                    </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+
+        <!-- Sejarah / Perjalanan Organisasi -->
+        <div class="mt-24">
+            <div class="text-center mb-16 reveal-on-scroll">
+                <p class="text-xs md:text-sm font-bold text-gray-500 tracking-widest uppercase mb-2">{{ $locale == 'id' ? 'SEJARAH' : 'HISTORY' }}</p>
+                <h2 class="text-2xl md:text-3xl font-bold text-hpi-green">{{ $locale == 'id' ? 'Perjalanan Organisasi' : 'Organizational Journey' }}</h2>
+                <span class="inline-block w-14 h-1 bg-gradient-to-r from-[#005344] to-[#937538] rounded-full mt-4"></span>
+            </div>
+
+            <div class="relative max-w-5xl mx-auto px-4 md:px-0">
+                <!-- Garis Vertikal Timeline Tengah (gradient hijau ke gold) -->
+                <div class="absolute left-8 md:left-1/2 top-0 bottom-0 w-1 bg-gradient-to-b from-[#005344] via-gray-200 to-[#937538] transform md:-translate-x-1/2 rounded-full"></div>
+
+                <div class="space-y-12">
+                    <!-- 1988 -->
+                    <div class="relative flex flex-col md:flex-row items-start md:items-center justify-between w-full reveal-on-scroll">
+                        <div class="order-2 md:order-1 w-full md:w-5/12 pl-16 md:pl-0 md:text-right md:pr-12">
+                            <h3 class="text-xl font-bold text-gray-900 mb-2">{{ $locale == 'id' ? 'Pendirian HPI Nasional' : 'National HPI Founded' }}</h3>
+                            <p class="text-sm text-gray-600 leading-relaxed">{{ $locale == 'id' ? 'Himpunan Pramuwisata Indonesia berdiri melalui temu wicara nasional di Pandan, Jawa Timur (29-30 Maret), dan resmi disahkan pada 5 Oktober di Palembang dalam MUNAS Pertama.' : 'The Indonesian Tourist Guide Association was established through a national dialogue in Pandan, East Java (March 29-30), and officially legalized on October 5 in Palembang during the First National Conference.' }}</p>
+                        </div>
+                        <div class="order-1 md:order-2 absolute left-8 md:left-1/2 transform -translate-x-1/2 flex items-center justify-center w-8 h-8 rounded-full bg-[#005344] border-4 border-white shadow-lg ring-4 ring-[#005344]/10"></div>
+                        <div class="order-3 w-full md:w-5/12 pl-16 md:pl-12 mt-2 md:mt-0">
+                            <span class="text-3xl md:text-4xl font-extrabold text-[#005344] tracking-wider">1988</span>
+                        </div>
+                    </div>
+
+                    <!-- 1990 -->
+                    <div class="relative flex flex-col md:flex-row items-start md:items-center justify-between w-full reveal-on-scroll">
+                        <div class="order-2 md:order-3 w-full md:w-5/12 pl-16 md:pl-12">
+                            <h3 class="text-xl font-bold text-gray-900 mb-2">{{ $locale == 'id' ? 'Regulasi Pramuwisata' : 'Tour Guide Regulation' }}</h3>
+                            <p class="text-sm text-gray-600 leading-relaxed">{{ $locale == 'id' ? 'Keputusan Dirjen Pariwisata Nomor Kep.07/K/111/90 mengatur Lencana Pramuwisata dan Pengatur Wisata, memperkuat posisi HPI sebagai organisasi profesi resmi.' : 'Decree of the Director General of Tourism No. Kep.07/K/111/90 regulates the Guide and Tour Manager Badge, strengthening HPI\'s position as an official professional organization.' }}</p>
+                        </div>
+                        <div class="order-1 md:order-2 absolute left-8 md:left-1/2 transform -translate-x-1/2 flex items-center justify-center w-8 h-8 rounded-full bg-[#937538] border-4 border-white shadow-lg ring-4 ring-[#937538]/10"></div>
+                        <div class="order-3 md:order-1 w-full md:w-5/12 pl-16 md:pl-0 md:text-right md:pr-12 mt-2 md:mt-0">
+                            <span class="text-3xl md:text-4xl font-extrabold text-[#937538] tracking-wider">1990</span>
+                        </div>
+                    </div>
+
+                    <!-- 2008 -->
+                    <div class="relative flex flex-col md:flex-row items-start md:items-center justify-between w-full reveal-on-scroll">
+                        <div class="order-2 md:order-1 w-full md:w-5/12 pl-16 md:pl-0 md:text-right md:pr-12">
+                            <h3 class="text-xl font-bold text-gray-900 mb-2">{{ $locale == 'id' ? 'Berdirinya DPC HPI Malang' : 'Establishment of DPC HPI Malang' }}</h3>
+                            <p class="text-sm text-gray-600 leading-relaxed">{{ $locale == 'id' ? 'Musyawarah Cabang pertama digelar pada 1 Juni 2008 di Ruang Sidang Mojopahit Balai Kota Malang. Siswantoro ditetapkan sebagai Ketua pertama DPC HPI Kota Malang.' : 'The first Branch Conference was held on June 1, 2008, in the Mojopahit Meeting Room of Malang City Hall. Siswantoro was appointed as the first Chairman of DPC HPI Malang City.' }}</p>
+                        </div>
+                        <div class="order-1 md:order-2 absolute left-8 md:left-1/2 transform -translate-x-1/2 flex items-center justify-center w-8 h-8 rounded-full bg-[#005344] border-4 border-white shadow-lg ring-4 ring-[#005344]/10"></div>
+                        <div class="order-3 w-full md:w-5/12 pl-16 md:pl-12 mt-2 md:mt-0">
+                            <span class="text-3xl md:text-4xl font-extrabold text-[#005344] tracking-wider">2008</span>
+                        </div>
+                    </div>
+
+                    <!-- 2026 -->
+                    <div class="relative flex flex-col md:flex-row items-start md:items-center justify-between w-full reveal-on-scroll">
+                        <div class="order-2 md:order-3 w-full md:w-5/12 pl-16 md:pl-12">
+                            <h3 class="text-xl font-bold text-gray-900 mb-2">{{ $locale == 'id' ? 'Periode Kepengurusan 2026-2030' : '2026-2030 Management Period' }}</h3>
+                            <p class="text-sm text-gray-600 leading-relaxed">{{ $locale == 'id' ? 'Aris Rahma Cita Wimanda, S.Pd., M.Pd. terpilih sebagai Ketua Umum DPC HPI Malang, membawa semangat baru menuju organisasi yang profesional, berdaya saing, dan sejahtera.' : 'Aris Rahma Cita Wimanda, S.Pd., M.Pd. was elected as the General Chairman of DPC HPI Malang, bringing a new spirit towards a professional, competitive, and prosperous organization.' }}</p>
+                        </div>
+                        <div class="order-1 md:order-2 absolute left-8 md:left-1/2 transform -translate-x-1/2 flex items-center justify-center w-8 h-8 rounded-full bg-[#937538] border-4 border-white shadow-lg ring-4 ring-[#937538]/10"></div>
+                        <div class="order-3 md:order-1 w-full md:w-5/12 pl-16 md:pl-0 md:text-right md:pr-12 mt-2 md:mt-0">
+                            <span class="text-3xl md:text-4xl font-extrabold text-[#937538] tracking-wider">2026</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+<!-- ================= AKHIR PENAMBAHAN KODE BARU ================= -->
 
 <!-- 4. MENGAPA MEMILIH HPI? -->
 <section class="py-16 md:py-24 bg-white overflow-hidden">

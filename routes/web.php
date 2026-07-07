@@ -67,6 +67,9 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     // Rute untuk Berita & Kegiatan
     Route::resource('berita', \App\Http\Controllers\Admin\KegiatanBeritaController::class)->parameters(['berita' => 'berita']);
     Route::resource('direktori', \App\Http\Controllers\Admin\PramuwisataController::class);
+    // --- Rute Kontak ---
+    Route::get('/kontak', [\App\Http\Controllers\Admin\KontakController::class, 'index'])->name('kontak.index');
+    Route::put('/kontak', [\App\Http\Controllers\Admin\KontakController::class, 'update'])->name('kontak.update');
 });
 
 Route::middleware('auth')->group(function () {

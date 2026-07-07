@@ -24,15 +24,27 @@
         <table class="w-full text-left border-collapse">
             <thead>
                 <tr class="bg-gray-50 text-gray-600 text-sm border-b border-gray-200">
+                    <th class="py-3 px-4 font-semibold w-16">Foto</th>
                     <th class="py-3 px-4 font-semibold w-40">Kategori</th>
                     <th class="py-3 px-4 font-semibold">Nama Pengurus</th>
-                    <th class="py-3 px-4 font-semibold">Jabatan & Divisi (ID)</th>
+                    <th class="py-3 px-4 font-semibold">Jabatan</th>
                     <th class="py-3 px-4 font-semibold text-right">Aksi</th>
                 </tr>
             </thead>
             <tbody class="text-sm">
                 @foreach($struktur as $item)
                 <tr class="border-b border-gray-100 hover:bg-gray-50 transition">
+                    <!-- Thumbnail Foto -->
+                    <td class="py-3 px-4">
+                        @if($item->foto)
+                            <img src="{{ asset('storage/' . $item->foto) }}" class="w-10 h-10 rounded-full object-cover border border-gray-200 shadow-sm">
+                        @else
+                            <div class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-400">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                            </div>
+                        @endif
+                    </td>
+                    <!-- Kategori -->
                     <td class="py-3 px-4">
                         @if($item->kategori_pengurus == 'Pengurus Harian')
                             <span class="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">{{ $item->kategori_pengurus }}</span>
@@ -46,12 +58,13 @@
                         {{ $item->nama }}
                     </td>
                     <td class="py-3 px-4">
-                        <p class="font-bold text-emerald-600 mb-1">{{ $item->jabatan_id }}</p>
-                        @if($item->divisi_id)
-                            <p class="text-xs text-gray-500">{{ $item->divisi_id }}</p>
+                        @if($item->jabatan_id != '-')
+                            <p class="font-bold text-emerald-600">{{ $item->jabatan_id }}</p>
+                        @else
+                            <p class="text-gray-400 italic">-</p>
                         @endif
                     </td>
-                    <td class="py-3 px-4 flex justify-end gap-2">
+                    <td class="py-3 px-4 flex justify-end gap-2 items-center">
                         <a href="{{ route('admin.struktur-organisasi.edit', $item->id) }}" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1.5 rounded-lg transition text-xs font-bold">Edit</a>
                         <form action="{{ route('admin.struktur-organisasi.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus data ini?')">
                             @csrf
