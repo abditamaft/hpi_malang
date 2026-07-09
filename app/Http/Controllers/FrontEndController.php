@@ -162,7 +162,7 @@ class FrontEndController extends Controller
 
     public function showPramuwisata(string $slug)
     {
-        $item = Pramuwisata::published()->where('slug', $slug)->firstOrFail();
+        $item = Pramuwisata::published()->with('portofolio')->where('slug', $slug)->firstOrFail();
         return view('showPramuwisata', ['item' => $item]);
     }
     

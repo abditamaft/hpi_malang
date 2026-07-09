@@ -11,6 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+        Schema::dropIfExists('portofolio');
         Schema::create('portofolio', function (Blueprint $table) {
             // $table->id() otomatis membuat kolom 'id' bertipe BIGINT UNSIGNED
             $table->id();

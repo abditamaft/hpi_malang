@@ -97,6 +97,19 @@ class KegiatanBeritaController extends Controller
             'isi_id' => 'nullable|string',
             'isi_en' => 'nullable|string',
             'status' => 'nullable|boolean',
+        ],[
+            'url_gambar.image' => 'File yang diunggah harus berupa gambar.',
+            'url_gambar.max' => 'Ukuran file gambar tidak boleh lebih dari 5 MB.',
+            'url_sumber.url' => 'URL sumber harus berupa URL yang valid.',
+            'url_sumber.max' => 'URL sumber tidak boleh lebih dari 255 karakter.',
+            'judul_id.required' => 'Judul (Indonesia) wajib diisi.',
+            'judul_id.max' => 'Judul (Indonesia) tidak boleh lebih dari 255 karakter.',
+            'judul_en.required' => 'Judul (English) wajib diisi.',
+            'judul_en.max' => 'Judul (English) tidak boleh lebih dari 255 karakter.',
+            'kategori_id.max' => 'Kategori (Indonesia) tidak boleh lebih dari 100 karakter.',
+            'kategori_en.max' => 'Kategori (English) tidak boleh lebih dari 100 karakter.',
+            'deskripsi_singkat_id.max' => 'Deskripsi singkat (Indonesia) tidak boleh lebih dari 500 karakter.',
+            'deskripsi_singkat_en.max' => 'Deskripsi singkat (English) tidak boleh lebih dari 500 karakter.',
         ]);
         $validated['status'] = $request->boolean('status');
         if ($validated['tipe'] === 'berita') {
