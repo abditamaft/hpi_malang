@@ -150,11 +150,13 @@
 <!-- SECTION 2: VISION & MISSION -->
 <section id="about-section-2" class="relative min-h-screen flex flex-col justify-center py-20 bg-gray-50 px-6 overflow-hidden">
     <!-- SVG Transition Overlay Section 2 (Center Circle Expansion) -->
-    <div class="absolute inset-0 pointer-events-none z-40">
+    <div class="absolute inset-0 pointer-events-none z-40 hidden md:block">
         <svg class="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
             <circle id="svg-overlay-2" cx="50" cy="50" r="0" fill="#ffffff" />
         </svg>
     </div>
+    <!-- Mobile Transition Overlay (Fade In) -->
+    <div id="mobile-fade-overlay-2" class="absolute inset-0 bg-white pointer-events-none z-40 md:hidden opacity-0"></div>
 
     <div class="max-w-6xl mx-auto w-full relative z-10">
         <div class="text-center mb-16">
@@ -419,58 +421,86 @@
 
 
 
-        // ================= SECTION 2 ANIMATION =================
+        // ================= SECTION 2 & 3 ANIMATIONS (RESPONSIVE) =================
         const h2Section2 = document.querySelector("#about-section-2 h2");
         const pSection2 = document.querySelector("#about-section-2 p");
         const gridSection2 = document.querySelector("#about-section-2 .grid");
-
         const charsH2 = splitTextByChars(h2Section2);
         const charsP2 = splitTextByChars(pSection2);
 
-        if (gridSection2) gsap.set(gridSection2, { opacity: 0, y: 40 });
-
-        const tl2 = gsap.timeline({
-            scrollTrigger: {
-                trigger: "#about-section-2",
-                start: "top top",
-                end: "+=250%",
-                pin: true,
-                scrub: 1.2,
-            }
-        });
-
-        if (charsH2.length > 0) tl2.to(charsH2, { opacity: 1, y: 0, stagger: 0.015, duration: 0.6, ease: "power2.out" }, 0);
-        if (charsP2.length > 0) tl2.to(charsP2, { opacity: 1, y: 0, stagger: 0.003, duration: 0.6, ease: "power2.out" }, 0.2);
-        if (gridSection2) tl2.to(gridSection2, { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }, 0.3);
-
-        tl2.to("#svg-overlay-2", { attr: { r: 75 }, duration: 1.0, ease: "power1.inOut" }, 2.2);
-
-        // ================= SECTION 3 ANIMATION =================
         const h2Section3 = document.querySelector("#about-section-3 h2");
         const pSection3 = document.querySelector("#about-section-3 p");
         const gridSection3 = document.querySelector("#about-section-3 .grid");
         const cardSection3 = document.querySelector("#about-section-3 .bg-gray-100");
-
         const charsH3 = splitTextByChars(h2Section3);
         const charsP3 = splitTextByChars(pSection3);
 
-        if (gridSection3) gsap.set(gridSection3, { opacity: 0, y: 40 });
-        if (cardSection3) gsap.set(cardSection3, { opacity: 0, y: 40 });
+        let mm = gsap.matchMedia();
 
-        const tl3 = gsap.timeline({
-            scrollTrigger: {
-                trigger: "#about-section-3",
-                start: "top top",
-                end: "+=120%",
-                pin: true,
-                scrub: 1.2,
-            }
+        // Desktop: Pin screen and use scrub transitions
+        mm.add("(min-width: 768px)", () => {
+            if (gridSection2) gsap.set(gridSection2, { opacity: 0, y: 40 });
+            if (gridSection3) gsap.set(gridSection3, { opacity: 0, y: 40 });
+            if (cardSection3) gsap.set(cardSection3, { opacity: 0, y: 40 });
+
+            const tl2 = gsap.timeline({
+                scrollTrigger: {
+                    trigger: "#about-section-2",
+                    start: "top top",
+                    end: "+=250%",
+                    pin: true,
+                    scrub: 1.2,
+                }
+            });
+            if (charsH2.length > 0) tl2.to(charsH2, { opacity: 1, y: 0, stagger: 0.015, duration: 0.6, ease: "power2.out" }, 0);
+            if (charsP2.length > 0) tl2.to(charsP2, { opacity: 1, y: 0, stagger: 0.003, duration: 0.6, ease: "power2.out" }, 0.2);
+            if (gridSection2) tl2.to(gridSection2, { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }, 0.3);
+            tl2.to("#svg-overlay-2", { attr: { r: 75 }, duration: 1.0, ease: "power1.inOut" }, 2.2);
+
+            const tl3 = gsap.timeline({
+                scrollTrigger: {
+                    trigger: "#about-section-3",
+                    start: "top top",
+                    end: "+=120%",
+                    pin: true,
+                    scrub: 1.2,
+                }
+            });
+            if (charsH3.length > 0) tl3.to(charsH3, { opacity: 1, y: 0, stagger: 0.015, duration: 0.6, ease: "power2.out" }, 0);
+            if (charsP3.length > 0) tl3.to(charsP3, { opacity: 1, y: 0, stagger: 0.003, duration: 0.6, ease: "power2.out" }, 0.2);
+            if (gridSection3) tl3.to(gridSection3, { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }, 0.3);
+            if (cardSection3) tl3.to(cardSection3, { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }, 0.5);
         });
 
-        if (charsH3.length > 0) tl3.to(charsH3, { opacity: 1, y: 0, stagger: 0.015, duration: 0.6, ease: "power2.out" }, 0);
-        if (charsP3.length > 0) tl3.to(charsP3, { opacity: 1, y: 0, stagger: 0.003, duration: 0.6, ease: "power2.out" }, 0.2);
-        if (gridSection3) tl3.to(gridSection3, { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }, 0.3);
-        if (cardSection3) tl3.to(cardSection3, { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }, 0.5);
+        // Mobile: Normal scroll with direct fade-in, no pin
+        mm.add("(max-width: 767px)", () => {
+            if (gridSection2) gsap.set(gridSection2, { opacity: 0, y: 30 });
+            if (gridSection3) gsap.set(gridSection3, { opacity: 0, y: 30 });
+            if (cardSection3) gsap.set(cardSection3, { opacity: 0, y: 30 });
+
+            const tl2Mobile = gsap.timeline({
+                scrollTrigger: {
+                    trigger: "#about-section-2",
+                    start: "top 75%",
+                    toggleActions: "play none none none"
+                }
+            });
+            if (charsH2.length > 0) tl2Mobile.to(charsH2, { opacity: 1, y: 0, stagger: 0.01, duration: 0.5, ease: "power2.out" }, 0);
+            if (charsP2.length > 0) tl2Mobile.to(charsP2, { opacity: 1, y: 0, stagger: 0.002, duration: 0.5, ease: "power2.out" }, 0.15);
+            if (gridSection2) tl2Mobile.to(gridSection2, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }, 0.25);
+
+            const tl3Mobile = gsap.timeline({
+                scrollTrigger: {
+                    trigger: "#about-section-3",
+                    start: "top 75%",
+                    toggleActions: "play none none none"
+                }
+            });
+            if (charsH3.length > 0) tl3Mobile.to(charsH3, { opacity: 1, y: 0, stagger: 0.01, duration: 0.5, ease: "power2.out" }, 0);
+            if (charsP3.length > 0) tl3Mobile.to(charsP3, { opacity: 1, y: 0, stagger: 0.002, duration: 0.5, ease: "power2.out" }, 0.15);
+            if (gridSection3) tl3Mobile.to(gridSection3, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }, 0.25);
+            if (cardSection3) tl3Mobile.to(cardSection3, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }, 0.35);
+        });
 
         // ================= SCROLL INDICATOR LOGIC =================
         const progressLine = document.querySelector("#scroll-indicator-progress");

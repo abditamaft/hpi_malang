@@ -415,7 +415,11 @@
                     <!-- Text Content -->
                     <div class="relative z-20 text-white">
                         <h4 class="font-bold text-lg md:text-2xl mb-2 text-white">{{ $locale == 'id' ? $layanan->nama_layanan_id : $layanan->nama_layanan_en }}</h4>
-                        <p class="text-xs md:text-sm text-gray-200 leading-relaxed line-clamp-3 md:line-clamp-none">{{ $locale == 'id' ? $layanan->deskripsi_id : $layanan->deskripsi_en }}</p>
+                        @php
+                            $desc = $locale == 'id' ? $layanan->deskripsi_id : $layanan->deskripsi_en;
+                            $firstSentence = preg_split('/(?<=[.?!])\s+/', trim($desc), 2)[0] ?? $desc;
+                        @endphp
+                        <p class="text-xs md:text-sm text-gray-200 leading-relaxed line-clamp-3 md:line-clamp-none">{{ $firstSentence }}</p>
                     </div>
                 </div>
                 @endforeach

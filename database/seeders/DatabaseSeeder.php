@@ -19,9 +19,9 @@ class DatabaseSeeder extends Seeder
         // Membuat akun admin HPI
         User::factory()->create([
             'name' => 'Administrator',
-            'username' => 'admin', // Ini username yang dipakai login
-            'email' => 'admin@hpimalang.org', // Tetap diisi sebagai formalitas
-            'password' => Hash::make('123'), // Password otomatis di-hash
+            'username' => 'abdikewer', // Ini username yang dipakai login
+            'email' => 'admin@hpimalang.com', // Tetap diisi sebagai formalitas
+            'password' => Hash::make('abdi1234'), // Password otomatis di-hash
         ]);
     }
 }

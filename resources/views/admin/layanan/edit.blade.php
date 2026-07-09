@@ -43,23 +43,17 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-2">Gambar Layanan</label>
-                    <input type="file" name="url_gambar" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-emerald-500" accept="image/*">
-                    <p class="text-xs text-gray-400 mt-1">Kosongkan jika tidak ingin mengubah gambar.</p>
-                    
-                    @if($layanan->url_gambar)
-                        <div class="mt-3">
-                            <span class="text-xs text-gray-500 block mb-1">Gambar saat ini:</span>
-                            <img src="{{ asset('storage/' . $layanan->url_gambar) }}" alt="{{ $layanan->nama_layanan_id }}" class="w-24 h-24 object-cover rounded-lg border border-gray-200">
-                        </div>
-                    @endif
-                </div>
-                <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-2">Ikon (Opsional)</label>
-                    <input type="text" name="ikon" value="{{ old('ikon', $layanan->ikon) }}" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-emerald-500">
-                </div>
+            <div class="mb-6">
+                <label class="block text-sm font-bold text-gray-700 mb-2">Gambar Layanan</label>
+                <input type="file" name="url_gambar" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-emerald-500" accept="image/*">
+                <p class="text-xs text-gray-400 mt-1">Kosongkan jika tidak ingin mengubah gambar.</p>
+                
+                @if($layanan->url_gambar)
+                    <div class="mt-3">
+                        <span class="text-xs text-gray-500 block mb-1">Gambar saat ini:</span>
+                        <img src="{{ asset('storage/' . $layanan->url_gambar) }}" alt="{{ $layanan->nama_layanan_id }}" class="w-24 h-24 object-cover rounded-lg border border-gray-200">
+                    </div>
+                @endif
             </div>
 
             <div class="flex justify-end gap-3 pt-4 border-t border-gray-100">

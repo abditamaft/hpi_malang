@@ -22,7 +22,6 @@
             <thead>
                 <tr class="bg-gray-50 text-gray-600 text-sm border-b border-gray-200">
                     <th class="py-3 px-4 font-semibold w-24">Gambar</th>
-                    <th class="py-3 px-4 font-semibold w-12">Ikon</th>
                     <th class="py-3 px-4 font-semibold w-1/4">Nama Layanan (ID / EN)</th>
                     <th class="py-3 px-4 font-semibold">Deskripsi (ID / EN)</th>
                     <th class="py-3 px-4 font-semibold text-right">Aksi</th>
@@ -33,13 +32,10 @@
                 <tr class="border-b border-gray-100 hover:bg-gray-50 transition">
                     <td class="py-3 px-4">
                         @if($item->url_gambar)
-                            <img src="{{ asset('storage/' . $item->url_gambar) }}" alt="{{ $item->nama_layanan_id }}" class="w-16 h-16 object-cover rounded-lg border border-gray-100 bg-gray-50">
+                             <img src="{{ asset('storage/' . $item->url_gambar) }}" alt="{{ $item->nama_layanan_id }}" class="w-16 h-16 object-cover rounded-lg border border-gray-100 bg-gray-50">
                         @else
-                            <span class="text-gray-400 italic">No image</span>
+                             <span class="text-gray-400 italic">No image</span>
                         @endif
-                    </td>
-                    <td class="py-3 px-4 font-mono text-gray-500">
-                        {{ $item->ikon ?: '-' }}
                     </td>
                     <td class="py-3 px-4">
                         <p class="font-bold text-gray-800">{{ $item->nama_layanan_id }}</p>

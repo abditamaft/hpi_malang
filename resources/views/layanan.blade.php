@@ -26,29 +26,30 @@
             @if(isset($layanan) && count($layanan) > 0)
                 {{-- Loop Data dari Admin/Database --}}
                 @foreach($layanan as $item)
-                    <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col justify-between border border-gray-100">
+                    <div class="card-container bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col justify-between border border-gray-100" data-card-id="{{ $item->id }}">
                         <div class="relative h-64 md:h-72 w-full bg-gray-200">
                             @if($item->url_gambar)
                                 <img src="{{ asset('storage/' . $item->url_gambar) }}" alt="{{ $locale == 'id' ? $item->nama_layanan_id : $item->nama_layanan_en }}" class="w-full h-full object-cover">
                             @endif
-                            <div class="absolute top-4 right-4 bg-white/80 backdrop-blur-sm p-2 rounded-lg text-hpi-green text-xs">
-                                <span>{{ $item->ikon ?: '💼' }}</span>
-                            </div>
                         </div>
                         <div class="p-6 md:p-8 flex-1 flex flex-col justify-between">
                             <div>
                                 <h3 class="text-xl font-bold text-hpi-green mb-3">
                                     {{ $locale == 'id' ? $item->nama_layanan_id : $item->nama_layanan_en }}
                                 </h3>
-                                <p class="text-gray-600 text-sm leading-relaxed mb-6">
+                                <p class="text-gray-600 text-sm leading-relaxed mb-6 line-clamp-2">
                                     {{ $locale == 'id' ? $item->deskripsi_id : $item->deskripsi_en }}
                                 </p>
                             </div>
                             <div>
-                                <a href="/hubungi-kami" class="inline-flex items-center text-sm font-semibold text-hpi-green hover:underline group">
+                                <button type="button" class="btn-learn-more inline-flex items-center text-sm font-semibold text-hpi-green hover:underline group cursor-pointer"
+                                    data-id="{{ $item->id }}"
+                                    data-title="{{ $locale == 'id' ? $item->nama_layanan_id : $item->nama_layanan_en }}"
+                                    data-description="{{ $locale == 'id' ? $item->deskripsi_id : $item->deskripsi_en }}"
+                                    data-image="{{ $item->url_gambar ? asset('storage/' . $item->url_gambar) : '' }}">
                                     {{ $locale == 'id' ? 'Pelajari Lebih Lanjut' : 'Learn More' }}
                                     <svg class="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                                </a>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -76,13 +77,42 @@
             </div>
         </div>
 
+    <!-- Modal Popup for Service Detail -->
+    <div id="layanan-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm opacity-0 pointer-events-none" style="display: none;">
+        <!-- Modal Card (The target for FLIP) -->
+        <div id="modal-card" class="bg-white rounded-3xl overflow-hidden shadow-2xl max-w-2xl w-full relative flex flex-col max-h-[90vh]">
+            <!-- Close Button -->
+            <button id="modal-close" class="absolute top-4 right-4 z-10 bg-white/80 hover:bg-white text-gray-800 p-2 rounded-full shadow-md transition-all cursor-pointer">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            
+            <!-- Modal Image -->
+            <div class="relative h-64 sm:h-80 bg-gray-200">
+                <img id="modal-image" src="" alt="" class="w-full h-full object-cover">
+                <div class="absolute bottom-4 left-6 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-xl text-hpi-green text-sm font-bold shadow-sm">
+                    <span>{{ $locale == 'id' ? 'Detail Layanan' : 'Service Details' }}</span>
+                </div>
+            </div>
+            
+            <!-- Modal Body -->
+            <div class="p-6 sm:p-8 overflow-y-auto flex-1">
+                <h3 id="modal-title" class="text-2xl font-bold text-hpi-green mb-4"></h3>
+                <p id="modal-description" class="text-gray-600 text-sm sm:text-base leading-relaxed whitespace-pre-line"></p>
+            </div>
+        </div>
     </div>
 
-<!-- Load GSAP CDN -->
+    </div>
+
+<!-- Load GSAP & Flip Plugin CDN -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/Flip.min.js"></script>
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
+        // Register Flip plugin
+        gsap.registerPlugin(Flip);
+
         // Character splitter helper
         function splitTextByChars(element) {
             if (!element) return [];
@@ -130,6 +160,84 @@
                 ease: "power2.out"
             }, 0.5);
         }
+
+        // ================= GSAP FLIP MODAL LOGIC =================
+        const modal = document.querySelector("#layanan-modal");
+        const modalClosed = document.querySelector("#modal-close");
+        const modalImage = document.querySelector("#modal-image");
+        const modalTitle = document.querySelector("#modal-title");
+        const modalDescription = document.querySelector("#modal-description");
+        const modalItemCard = document.querySelector("#modal-card");
+
+        let activeCard = null;
+
+        document.querySelectorAll(".btn-learn-more").forEach(btn => {
+            btn.addEventListener("click", () => {
+                const card = btn.closest(".card-container");
+                activeCard = card;
+
+                // Populate modal content
+                modalTitle.textContent = btn.getAttribute("data-title");
+                modalDescription.textContent = btn.getAttribute("data-description");
+                
+                const imgUrl = btn.getAttribute("data-image");
+                if (imgUrl) {
+                    modalImage.src = imgUrl;
+                    modalImage.style.display = "block";
+                } else {
+                    modalImage.style.display = "none";
+                }
+
+                // Get state of the source card
+                const state = Flip.getState(card);
+
+                // Show modal overlay backdrop
+                modal.style.display = "flex";
+                modal.style.pointerEvents = "auto";
+                gsap.to(modal, { opacity: 1, duration: 0.3 });
+
+                // Flip the modal card container from the original card's geometry
+                Flip.from(state, {
+                    targets: modalItemCard,
+                    duration: 0.6,
+                    ease: "back.out(1.2)",
+                    absolute: true,
+                });
+            });
+        });
+
+        // Close modal function
+        function closeModal() {
+            if (!activeCard) return;
+
+            // Get state of the modal card
+            const state = Flip.getState(modalItemCard);
+
+            // Fade out overlay backdrop
+            gsap.to(modal, {
+                opacity: 0,
+                duration: 0.3,
+                onComplete: () => {
+                    modal.style.display = "none";
+                    modal.style.pointerEvents = "none";
+                }
+            });
+
+            // Flip back from modal card geometry to the card container
+            Flip.from(state, {
+                targets: activeCard,
+                duration: 0.5,
+                ease: "power2.inOut",
+                absolute: true,
+            });
+        }
+
+        modalClosed.addEventListener("click", closeModal);
+        modal.addEventListener("click", (e) => {
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
     });
 </script>
 @endsection
