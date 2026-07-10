@@ -101,8 +101,8 @@ class FrontEndController extends Controller
             'status'       => 'Pending' // Wajib 'Pending' agar tidak langsung tampil sebelum disetujui admin
         ]);
 
-        // 3. Kembalikan pengunjung ke halaman beranda beserta pesan sukses
-        return redirect()->back()->with('success', 'Terima kasih! Ulasan Anda berhasil dikirim dan sedang menunggu persetujuan admin.');
+        // 3. Kembalikan pengunjung ke bagian ulasan beserta pesan sukses
+        return redirect()->to(url()->previous() . '#ulasan-section')->with('success', 'Terima kasih! Ulasan Anda berhasil dikirim dan sedang menunggu persetujuan admin.');
     }
 
     // Biarkan fungsi bawaan resource ini kosong untuk sekarang

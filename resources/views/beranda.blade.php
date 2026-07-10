@@ -78,9 +78,17 @@
     <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-12 gap-8 md:gap-12 items-center w-full">
         <!-- Foto Ketua -->
         <div class="md:col-span-4 flex justify-center">
-            <div class="relative overflow-hidden rounded-2xl w-48 h-48 md:w-64 md:h-64 shadow-lg border-4 border-gray-100 bg-white">
+            <div class="relative overflow-hidden rounded-2xl w-48 md:w-64 aspect-[3/4] shadow-lg border-4 border-gray-100 bg-white">
                 <!-- Foto ketua masih hardcode karena struktur_organisasi tidak memiliki kolom foto -->
-                <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=400&h=400&q=80" alt="Ketua HPI" class="w-full h-full object-cover welcome-image">
+                @if($ketua && $ketua->foto)
+                    <!-- Menampilkan foto dinamis dari database -->
+                    <img src="{{ asset('storage/' . $ketua->foto) }}" alt="{{ $ketua->nama }}" class="w-full h-full object-cover welcome-image">
+                @else
+                    <!-- Fallback gambar default jika Ketua belum memiliki foto -->
+                    <div class="w-full h-full bg-gray-200 flex items-center justify-center text-gray-400 welcome-image">
+                        <svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                    </div>
+                @endif
                 <!-- SVG Curtain overlay -->
                 <svg class="absolute inset-0 w-full h-full z-10 pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none">
                     <path class="welcome-curtain" d="M 0 0 H 100 V 100 H 0 Z" fill="white" />
@@ -99,7 +107,7 @@
             </h2>
             
             <p class="text-sm md:text-base text-gray-600 mb-6 md:mb-8 leading-relaxed welcome-desc">
-                {{ $locale == 'id' ? 'Kami hadir tidak hanya sebagai penunjuk jalan, tetapi sebagai pencerita yang membawa setiap tamu menyelami kedalaman budaya dan keindahan alam Malang. Komitmen kami adalah memberikan standar pelayanan prima yang berintegritas, memastikan setiap perjalanan menjadi pengalaman yang bermakna dan tak terlupakan.' : 'We are here not just as guides, but as storytellers bringing guests into the depth of Malang\'s culture and beauty...' }}
+                {{ $locale == 'id' ? 'Kami hadir tidak hanya sebagai penunjuk jalan, tetapi sebagai pencerita yang membawa setiap tamu menyelami kedalaman budaya dan keindahan alam Malang. Komitmen kami adalah memberikan standar pelayanan prima yang berintegritas, memastikan setiap perjalanan menjadi pengalaman yang bermakna dan tak terlupakan.' : 'We serve not merely as guides, but as storytellers who immerse every guest in the cultural depth and natural beauty of Malang. We are committed to delivering excellent service with integrity, ensuring that every journey becomes a meaningful and unforgettable experience.' }}
             </p>
             
             <h4 class="font-bold text-base md:text-lg text-gray-900 welcome-author">{{ $ketua ? $ketua->nama : 'Aris Rahma Cita Wimanda' }}</h4>
@@ -277,39 +285,122 @@
 </section>
 <!-- ================= AKHIR PENAMBAHAN KODE BARU ================= -->
 
+<!-- Load Swiper CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+<style>
+    /* Styling khusus panah Swiper agar sesuai tema HPI */
+    .swiper-button-next::after, .swiper-button-prev::after {
+        font-size: 1.25rem !important;
+        font-weight: bold;
+    }
+    .swiper-pagination-bullet-active {
+        background-color: #005344 !important;
+    }
+	/* TAMBAHAN: Pagination dipisah dari absolute positioning bawaan Swiper */
+    .swiper-pagination-custom {
+        position: static !important;
+        margin-top: 1.75rem;
+    }
+</style>
+
 <!-- 4. MENGAPA MEMILIH HPI? -->
 <section class="py-16 md:py-24 bg-white overflow-hidden">
-    <div class="max-w-7xl mx-auto px-6">
-        <h2 class="text-2xl md:text-3xl font-bold text-center mb-10 md:mb-14 text-hpi-green">{{ $locale == 'id' ? 'Mengapa Memilih HPI?' : 'Why Choose HPI?' }}</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-            @foreach(\App\Models\Keunggulan::all() as $item)
-            <div class="bg-white p-6 md:p-8 rounded-2xl border border-gray-200 hover:shadow-lg transition-shadow reveal-on-scroll">
-                <div class="text-hpi-green mb-4 md:mb-5 w-10 h-10 [&>svg]:w-full [&>svg]:h-full flex items-center justify-start text-3xl">
-                    @if(str_starts_with(trim($item->ikon), '<'))
-                        {!! $item->ikon !!}
-                    @else
-                        @php
-                            $iconClass = trim($item->ikon);
-                            if ($iconClass) {
-                                if (!str_starts_with($iconClass, 'fa')) {
-                                    $iconClass = 'fa-solid fa-' . $iconClass;
-                                } elseif (!str_contains($iconClass, ' ')) {
-                                    $iconClass = 'fa-solid ' . $iconClass;
-                                }
-                            }
-                        @endphp
-                        @if($iconClass)
-                            <i class="{{ $iconClass }}"></i>
-                        @endif
-                    @endif
+    <div class="max-w-7xl mx-auto px-6 reveal-on-scroll relative">
+        <h2 class="text-2xl md:text-3xl font-bold text-center mb-10 md:mb-14 text-hpi-green">
+            {{ $locale == 'id' ? 'Mengapa Memilih HPI?' : 'Why Choose HPI?' }}
+        </h2>
+        
+        <!-- Swiper Container -->
+        <div class="swiper keunggulanSwiper px-2">
+            <div class="swiper-wrapper">
+                @php 
+                    $keunggulanData = \App\Models\Keunggulan::all(); 
+                @endphp
+                
+                @foreach($keunggulanData as $item)
+                <!-- swiper-slide: h-auto agar tinggi semua card seragam mengikuti yang paling panjang -->
+                <div class="swiper-slide h-auto">
+                    <div class="bg-white p-6 md:p-8 rounded-2xl border border-gray-200 hover:shadow-lg transition-shadow h-full flex flex-col">
+                        <div class="text-hpi-green mb-4 md:mb-5 w-10 h-10 [&>svg]:w-full [&>svg]:h-full flex items-center justify-start text-3xl">
+                            @if(str_starts_with(trim($item->ikon), '<'))
+                                {!! $item->ikon !!}
+                            @else
+                                @php
+                                    $iconClass = trim($item->ikon);
+                                    if ($iconClass) {
+                                        if (!str_starts_with($iconClass, 'fa')) {
+                                            $iconClass = 'fa-solid fa-' . $iconClass;
+                                        } elseif (!str_contains($iconClass, ' ')) {
+                                            $iconClass = 'fa-solid ' . $iconClass;
+                                        }
+                                    }
+                                @endphp
+                                @if($iconClass)
+                                    <i class="{{ $iconClass }}"></i>
+                                @endif
+                            @endif
+                        </div>
+                        <h4 class="font-bold text-base md:text-lg text-gray-900 mb-2 md:mb-3">{{ $locale == 'id' ? $item->judul_id : $item->judul_en }}</h4>
+                        <p class="text-xs md:text-sm text-gray-600 leading-relaxed">{{ $locale == 'id' ? $item->deskripsi_id : $item->deskripsi_en }}</p>
+                    </div>
                 </div>
-                <h4 class="font-bold text-base md:text-lg text-gray-900 mb-2 md:mb-3">{{ $locale == 'id' ? $item->judul_id : $item->judul_en }}</h4>
-                <p class="text-xs md:text-sm text-gray-600 leading-relaxed">{{ $locale == 'id' ? $item->deskripsi_id : $item->deskripsi_en }}</p>
+                @endforeach
             </div>
-            @endforeach
-        </div>
+
+<!-- Tombol Navigasi Kiri Kanan (Sembunyi di HP, Tampil di Desktop) -->
+<div class="swiper-button-prev hidden md:flex !text-hpi-green !w-10 !h-10 bg-white/70 hover:bg-white opacity-40 hover:opacity-100 shadow-sm hover:shadow-md backdrop-blur-sm rounded-full -left-4 top-[45%] transition-all duration-300"></div>
+<div class="swiper-button-next hidden md:flex !text-hpi-green !w-10 !h-10 bg-white/70 hover:bg-white opacity-40 hover:opacity-100 shadow-sm hover:shadow-md backdrop-blur-sm rounded-full -right-4 top-[45%] transition-all duration-300"></div>
+</div>
+<!-- Titik Indikator di Bawah: class unik "keunggulan-pagination" agar tidak bentrok dengan swiper lain -->
+<div class="swiper-pagination keunggulan-pagination swiper-pagination-custom"></div>
     </div>
 </section>
+
+<!-- Load Swiper JS -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+<!-- Inisialisasi Script Swiper -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Hitung total item dari database
+        const totalItems = {{ $keunggulanData->count() }};
+        
+        new Swiper(".keunggulanSwiper", {
+            slidesPerView: 1, // Tampilan awal di HP (1 card)
+            spaceBetween: 20,
+            grabCursor: true,
+            autoplay: {
+                delay: 3500, // Otomatis geser setiap 3.5 detik
+                disableOnInteraction: false, // Tetap autoplay walau sudah di-klik user
+            },
+            navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+            },
+            pagination: {
+                el: ".keunggulan-pagination",
+                clickable: true,
+            },
+            breakpoints: {
+                // Konfigurasi untuk Tablet (Lebar >= 640px)
+                640: {
+                    slidesPerView: 2, // Tampilan max 2 card
+                    spaceBetween: 24,
+                    loop: totalItems > 2, // Mode infinite aktif jika data > 2
+                },
+                // Konfigurasi untuk Desktop (Lebar >= 1024px)
+                1024: {
+                    slidesPerView: 4, // Tampilan max 4 card
+                    spaceBetween: 24,
+                    loop: totalItems > 4, // Mode infinite aktif jika data > 4
+                },
+            },
+            // Mode infinite untuk HP aktif jika data > 1
+            loop: totalItems > 1 
+        });
+    });
+</script>
 
 <!-- 5. DESTINASI WISATA -->
 <section class="py-16 md:py-24 bg-[#F4F4F4] overflow-hidden">
@@ -415,7 +506,7 @@
                     <!-- Text Content -->
                     <div class="relative z-20 text-white">
                         <h4 class="font-bold text-lg md:text-2xl mb-2 text-white">{{ $locale == 'id' ? $layanan->nama_layanan_id : $layanan->nama_layanan_en }}</h4>
-                        @php
+                       @php
                             $desc = $locale == 'id' ? $layanan->deskripsi_id : $layanan->deskripsi_en;
                             $firstSentence = preg_split('/(?<=[.?!])\s+/', trim($desc), 2)[0] ?? $desc;
                         @endphp
@@ -453,19 +544,76 @@
 
 <!-- 7. ALUR RESERVASI -->
 <section class="py-16 md:py-24 bg-white border-t border-gray-100 overflow-hidden">
-    <div class="max-w-7xl mx-auto px-6">
+    <div class="max-w-7xl mx-auto px-6 reveal-on-scroll relative">
         <h2 class="text-2xl md:text-3xl font-bold text-center mb-10 md:mb-14 text-hpi-green">{{ $locale == 'id' ? 'Alur Reservasi' : 'Reservation Flow' }}</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-            @foreach(\App\Models\AlurReservasi::orderBy('langkah_ke', 'asc')->get() as $alur)
-            <div class="bg-white p-6 md:p-8 rounded-2xl border border-gray-200 text-left reveal-on-scroll" style="transition-delay: {{ $alur->langkah_ke * 100 }}ms">
-                <div class="w-10 h-10 md:w-12 md:h-12 bg-hpi-green text-white rounded-full flex items-center justify-center text-lg md:text-xl font-bold mb-4 md:mb-6">{{ $alur->langkah_ke }}</div>
-                <h4 class="font-bold text-base md:text-lg mb-2 md:mb-3">{{ $locale == 'id' ? $alur->judul_id : $alur->judul_en }}</h4>
-                <p class="text-xs md:text-sm text-gray-600 leading-relaxed">{{ $locale == 'id' ? $alur->deskripsi_id : $alur->deskripsi_en }}</p>
+        
+        <!-- Swiper Container -->
+        <div class="swiper alurSwiper !pb-14 px-2">
+            <div class="swiper-wrapper">
+                @php 
+                    $alurData = \App\Models\AlurReservasi::orderBy('langkah_ke', 'asc')->get(); 
+                @endphp
+                
+                @foreach($alurData as $alur)
+                <!-- swiper-slide h-auto agar tingginya rata -->
+                <div class="swiper-slide h-auto">
+                    <div class="bg-white p-6 md:p-8 rounded-2xl border border-gray-200 text-left h-full flex flex-col hover:shadow-lg transition-shadow">
+                        <div class="w-10 h-10 md:w-12 md:h-12 bg-hpi-green text-white rounded-full flex items-center justify-center text-lg md:text-xl font-bold mb-4 md:mb-6 shrink-0">{{ $alur->langkah_ke }}</div>
+                        <h4 class="font-bold text-base md:text-lg mb-2 md:mb-3">{{ $locale == 'id' ? $alur->judul_id : $alur->judul_en }}</h4>
+                        <p class="text-xs md:text-sm text-gray-600 leading-relaxed">{{ $locale == 'id' ? $alur->deskripsi_id : $alur->deskripsi_en }}</p>
+                    </div>
+                </div>
+                @endforeach
             </div>
-            @endforeach
+
+            <!-- Tombol Navigasi Kiri Kanan Khusus Alur (Sembunyi di HP, Tampil di Desktop) -->
+            <div class="swiper-button-prev alur-prev hidden md:flex !text-hpi-green !w-10 !h-10 bg-white/70 hover:bg-white opacity-40 hover:opacity-100 shadow-sm hover:shadow-md backdrop-blur-sm rounded-full -left-4 top-[45%] transition-all duration-300"></div>
+<div class="swiper-button-next alur-next hidden md:flex !text-hpi-green !w-10 !h-10 bg-white/70 hover:bg-white opacity-40 hover:opacity-100 shadow-sm hover:shadow-md backdrop-blur-sm rounded-full -right-4 top-[45%] transition-all duration-300"></div>
         </div>
+        <!-- Titik Indikator di Bawah: dipindah keluar dari .swiper -->
+        <div class="swiper-pagination alur-pagination swiper-pagination-custom"></div>
     </div>
 </section>
+
+<!-- Inisialisasi Script Swiper Alur -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const totalAlur = {{ $alurData->count() }};
+        
+        new Swiper(".alurSwiper", {
+            slidesPerView: 1, // Tampilan HP
+            spaceBetween: 20,
+            grabCursor: true,
+            autoplay: {
+                delay: 4000, // Dibuat 4 detik agar tidak barengan gesernya dengan slider sebelumnya
+                disableOnInteraction: false,
+            },
+            navigation: {
+                nextEl: ".alur-next",
+                prevEl: ".alur-prev",
+            },
+            pagination: {
+                el: ".alur-pagination",
+                clickable: true,
+            },
+            breakpoints: {
+                // Tablet
+                640: {
+                    slidesPerView: 2,
+                    spaceBetween: 24,
+                    loop: totalAlur > 2,
+                },
+                // Desktop
+                1024: {
+                    slidesPerView: 4,
+                    spaceBetween: 24,
+                    loop: totalAlur > 4,
+                },
+            },
+            loop: totalAlur > 1 
+        });
+    });
+</script>
 
 <!-- 8. KEGIATAN MENDATANG -->
 <section class="py-16 md:py-24 bg-[#F4F4F4] overflow-hidden">
@@ -495,31 +643,125 @@
     </div>
 </section>
 
+<style>
+    .testimoni-pagination .swiper-pagination-bullet-active {
+        background-color: #005344 !important;
+    }
+</style>
+
 <!-- 9. APA KATA MEREKA? (Testimoni) -->
 <section class="py-16 md:py-24 bg-white overflow-hidden">
-    <div class="max-w-7xl mx-auto px-6">
+    <div class="max-w-7xl mx-auto px-6 reveal-on-scroll relative">
         <h2 class="text-2xl md:text-3xl font-bold text-center mb-10 md:mb-14 text-hpi-green">{{ $locale == 'id' ? 'Apa Kata Mereka?' : 'What They Say?' }}</h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            @foreach(\App\Models\Ulasan::where('status', 'Approved')->limit(3)->get() as $ulasan)
-            <div class="bg-white p-6 md:p-8 rounded-2xl border border-gray-200 reveal-on-scroll">
-                <span class="text-4xl md:text-5xl text-gray-200 font-serif leading-none block mb-2">"</span>
-                <p class="text-xs md:text-sm text-gray-600 italic mb-4 md:mb-6">"{{ $locale == 'id' ? $ulasan->komentar_id : ($ulasan->komentar_en ?? $ulasan->komentar_id) }}"</p>
-                <h4 class="font-bold text-sm text-gray-900">{{ $ulasan->nama_lengkap }}</h4>
-                <p class="text-[10px] md:text-xs text-gray-400">Wisatawan - {{ $ulasan->asal_daerah }}</p>
+
+        <!-- Swiper Container -->
+        <div class="swiper testimoniSwiper !pb-14 px-2">
+            <div class="swiper-wrapper">
+                @php
+                    $ulasanData = \App\Models\Ulasan::where('status', 'Approved')->limit(10)->get();
+                @endphp
+
+                @foreach($ulasanData as $ulasan)
+                <!-- swiper-slide h-auto agar tinggi semua card seragam -->
+                <div class="swiper-slide h-auto">
+                    <div class="bg-white p-6 md:p-8 rounded-2xl border border-gray-200 h-full flex flex-col hover:shadow-lg transition-shadow reveal-on-scroll">
+                        <span class="text-4xl md:text-5xl text-gray-200 font-serif leading-none block mb-2">"</span>
+                        <p class="text-xs md:text-sm text-gray-600 italic mb-4 md:mb-6 flex-grow">"{{ $locale == 'id' ? $ulasan->komentar_id : ($ulasan->komentar_en ?? $ulasan->komentar_id) }}"</p>
+                        <h4 class="font-bold text-sm text-gray-900">{{ $ulasan->nama_lengkap }}</h4>
+                        <p class="text-[10px] md:text-xs text-gray-400">Wisatawan - {{ $ulasan->asal_daerah }}</p>
+                    </div>
+                </div>
+                @endforeach
             </div>
-            @endforeach
+
+            <!-- Tombol Navigasi Kiri Kanan Khusus Testimoni (Sembunyi di HP, Tampil di Desktop) -->
+            <div class="swiper-button-prev testimoni-prev hidden md:flex !text-hpi-green !w-10 !h-10 bg-white/70 hover:bg-white opacity-40 hover:opacity-100 shadow-sm hover:shadow-md backdrop-blur-sm rounded-full -left-4 top-[45%] transition-all duration-300"></div>
+            <div class="swiper-button-next testimoni-next hidden md:flex !text-hpi-green !w-10 !h-10 bg-white/70 hover:bg-white opacity-40 hover:opacity-100 shadow-sm hover:shadow-md backdrop-blur-sm rounded-full -right-4 top-[45%] transition-all duration-300"></div>
         </div>
+        <!-- Titik Indikator di Bawah: dipindah keluar dari .swiper -->
+        <div class="swiper-pagination testimoni-pagination swiper-pagination-custom"></div>
     </div>
 </section>
 
+<!-- Inisialisasi Script Swiper Testimoni -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const totalTestimoni = {{ $ulasanData->count() }};
+
+        new Swiper(".testimoniSwiper", {
+            slidesPerView: 1, // Tampilan HP
+            spaceBetween: 20,
+            grabCursor: true,
+            autoplay: {
+                delay: 4500, // Dibuat beda dari slider lain agar tidak barengan
+                disableOnInteraction: false,
+            },
+            navigation: {
+                nextEl: ".testimoni-next",
+                prevEl: ".testimoni-prev",
+            },
+            pagination: {
+                el: ".testimoni-pagination",
+                clickable: true,
+            },
+            breakpoints: {
+                // Tablet
+                640: {
+                    slidesPerView: 2,
+                    spaceBetween: 24,
+                    loop: totalTestimoni > 2,
+                },
+                // Desktop
+                1024: {
+                    slidesPerView: 3,
+                    spaceBetween: 24,
+                    loop: totalTestimoni > 3,
+                },
+            },
+            loop: totalTestimoni > 1
+        });
+    });
+</script>
+
 <!-- 10. KIRIM ULASAN ANDA -->
-<section class="py-16 md:py-24 bg-[#F4F4F4] overflow-hidden">
+<section id="ulasan-section" class="py-16 md:py-24 bg-[#F4F4F4] overflow-hidden">
     <div class="max-w-3xl mx-auto px-4 md:px-6">
         <div class="text-center mb-10 md:mb-12 reveal-on-scroll">
             <h2 class="text-2xl md:text-3xl font-bold text-hpi-green mb-3 md:mb-4">{{ $locale == 'id' ? 'Kirim Ulasan Anda' : 'Send Your Review' }}</h2>
             <p class="text-sm md:text-base text-gray-600">{{ $locale == 'id' ? 'Bagikan pengalaman Anda bersama pemandu HPI Kabupaten Malang.' : 'Share your experience with HPI Malang guides.' }}</p>
         </div>
         
+        <!-- ================= NOTIFIKASI SUKSES (Tampil Jika Berhasil) ================= -->
+        @if(session('success'))
+        <div class="mb-8 p-5 bg-emerald-50 border border-emerald-200 rounded-2xl flex items-start gap-4 shadow-sm relative overflow-hidden reveal-on-scroll" x-data="{ show: true }" x-show="show" x-transition>
+            <!-- Dekorasi Garis Kiri -->
+            <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-emerald-500"></div>
+            
+            <!-- Ikon Centang -->
+            <div class="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center shrink-0 text-emerald-600 shadow-sm border border-emerald-200 mt-0.5">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+            </div>
+            
+            <!-- Teks Notifikasi -->
+            <div class="flex-1 pr-4">
+                <h4 class="font-bold text-emerald-800 mb-1 text-base md:text-lg">
+                    {{ $locale == 'id' ? 'Terima Kasih!' : 'Thank You!' }}
+                </h4>
+                <p class="text-xs md:text-sm text-emerald-700 leading-relaxed">
+                    {{ $locale == 'id' 
+                        ? 'Ulasan Anda telah berhasil terkirim. Admin kami akan meninjau ulasan tersebut sebelum ditampilkan di halaman website.' 
+                        : 'Your review has been successfully submitted. Our admin will review it before it is displayed on the website.' }}
+                </p>
+            </div>
+
+            <!-- Tombol Tutup (X) -->
+            <button @click="show = false" type="button" class="text-emerald-500 hover:text-emerald-800 transition-colors p-1 bg-emerald-100 hover:bg-emerald-200 rounded-lg shrink-0">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+        @endif
+        <!-- ================= AKHIR NOTIFIKASI ================= -->
+
         <form action="{{ route('ulasan.store') }}" method="POST" class="bg-white p-6 md:p-10 rounded-2xl md:rounded-3xl shadow-sm reveal-on-scroll">
             @csrf
             <div class="mb-5 md:mb-6">
@@ -528,17 +770,17 @@
             </div>
             <div class="mb-5 md:mb-6">
                 <label class="block text-xs md:text-sm font-bold text-gray-700 mb-2">{{ $locale == 'id' ? 'Nama Lengkap' : 'Full Name' }}</label>
-                <input type="text" name="nama_lengkap" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-hpi-green transition">
+                <input type="text" name="nama_lengkap" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-hpi-green transition" required>
             </div>
             <div class="mb-5 md:mb-6">
                 <label class="block text-xs md:text-sm font-bold text-gray-700 mb-2">{{ $locale == 'id' ? 'Asal (Negara/Daerah)' : 'Origin' }}</label>
-                <input type="text" name="asal_daerah" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-hpi-green transition">
+                <input type="text" name="asal_daerah" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-hpi-green transition" required>
             </div>
             <div class="mb-6 md:mb-8">
                 <label class="block text-xs md:text-sm font-bold text-gray-700 mb-2">{{ $locale == 'id' ? 'Komentar' : 'Comment' }}</label>
-                <textarea rows="4" name="komentar_id" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-hpi-green transition"></textarea>
+                <textarea rows="4" name="komentar_id" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-hpi-green transition" required></textarea>
             </div>
-            <button type="submit" class="w-full bg-hpi-green hover:bg-emerald-900 text-white font-bold py-3 md:py-4 rounded-xl transition text-sm md:text-base">
+            <button type="submit" class="w-full bg-hpi-green hover:bg-emerald-900 text-white font-bold py-3 md:py-4 rounded-xl transition text-sm md:text-base shadow-md hover:shadow-lg">
                 {{ $locale == 'id' ? 'Kirim Ulasan' : 'Submit Review' }}
             </button>
         </form>
@@ -558,7 +800,8 @@
                 </button>
                 <div x-show="selected == {{ $faq->id }}" x-collapse x-cloak>
                     <div class="p-4 md:p-5 pt-0 text-xs md:text-sm text-gray-600 leading-relaxed border-t border-gray-50 mt-2">
-                        {{ $locale == 'id' ? $faq->jawaban_id : $faq->jawaban_en }}
+                        <!-- SETELAH REVISI -->
+						{!! $locale == 'id' ? $faq->jawaban_id : $faq->jawaban_en !!}
                     </div>
                 </div>
             </div>
@@ -636,38 +879,39 @@
         }
 
         // Timeline for the hero transition to the welcome section
-        const tl = gsap.timeline({
-            scrollTrigger: {
-                trigger: "#hero-section",
-                start: "top top",
-                end: "+=100%",
-                pin: true,
-                scrub: 1.2,
-                snap: {
-                    snapTo: 1,
-                    duration: { min: 0.6, max: 1.0 },
-                    ease: "power2.inOut"
+        const heroSection = document.getElementById("hero-section");
+        if (heroSection) {
+            const tl = gsap.timeline({
+                scrollTrigger: {
+                    trigger: heroSection,
+                    start: "top top",
+                    end: "+=100%",
+                    pin: true,
+                    scrub: 1.2,
+                    snap: {
+                        snapTo: 1,
+                        duration: { min: 0.6, max: 1.0 },
+                        ease: "power2.inOut"
+                    }
                 }
-            }
-        });
+            });
 
-        // Curved transition path animation (morphing up with inverted/flipped curve)
-        tl.to("#curve-path", {
-            attr: { d: "M 0 15 Q 50 65 100 15 L 100 100 L 0 100 Z" },
-            ease: "none"
-        }, 0)
-        .to("#curve-path", {
-            attr: { d: "M 0 0 Q 50 0 100 0 L 100 100 L 0 100 Z" },
-            ease: "none"
-        }, 0.5);
+            tl.to("#curve-path", {
+                attr: { d: "M 0 15 Q 50 65 100 15 L 100 100 L 0 100 Z" },
+                ease: "none"
+            }, 0)
+            .to("#curve-path", {
+                attr: { d: "M 0 0 Q 50 0 100 0 L 100 100 L 0 100 Z" },
+                ease: "none"
+            }, 0.5);
 
-        // Fade out and move up the hero content as a whole on scroll
-        tl.to("#hero-content", {
-            opacity: 0,
-            y: -100,
-            scale: 0.95,
-            ease: "power1.out"
-        }, 0);
+            tl.to("#hero-content", {
+                opacity: 0,
+                y: -100,
+                scale: 0.95,
+                ease: "power1.out"
+            }, 0);
+        }
 
         // Helper function to split text into lines dynamically
         function splitTextIntoLines(element) {
@@ -697,149 +941,162 @@
         // Welcome & About Scroll Animations
         let mmWelcome = gsap.matchMedia();
         
+        // Pengecekan keberadaan section
+        const welcomeSection = document.getElementById("welcome-section");
+        const aboutSection = document.getElementById("about-section");
+        
         // Desktop Welcome & About (Pin, Curtain, Split Lines)
         mmWelcome.add("(min-width: 768px)", () => {
-            // Apply line splitting for Welcome Section
-            const sec2Title = document.querySelector(".welcome-title");
-            const sec2Desc = document.querySelector(".welcome-desc");
-            const sec2Author = document.querySelector(".welcome-author");
-            const sec2Role = document.querySelector(".welcome-role");
-            splitTextIntoLines(sec2Title);
-            splitTextIntoLines(sec2Desc);
-            splitTextIntoLines(sec2Author);
-            splitTextIntoLines(sec2Role);
+            
+            if (welcomeSection) {
+                const sec2Title = document.querySelector(".welcome-title");
+                const sec2Desc = document.querySelector(".welcome-desc");
+                const sec2Author = document.querySelector(".welcome-author");
+                const sec2Role = document.querySelector(".welcome-role");
+                splitTextIntoLines(sec2Title);
+                splitTextIntoLines(sec2Desc);
+                splitTextIntoLines(sec2Author);
+                splitTextIntoLines(sec2Role);
 
-            // Apply line splitting for About Section
-            const sec3Title = document.querySelector(".about-title");
-            const sec3Desc = document.querySelector(".about-desc");
-            const sec3Subtitle = document.querySelector(".about-subtitle");
-            splitTextIntoLines(sec3Title);
-            splitTextIntoLines(sec3Desc);
-            splitTextIntoLines(sec3Subtitle);
+                let tlSec2 = gsap.timeline({
+                    scrollTrigger: {
+                        trigger: welcomeSection,
+                        start: "top top",
+                        end: "+=150%",
+                        pin: true,
+                        scrub: 1,
+                        anticipatePin: 1
+                    }
+                });
+                tlSec2
+                    .to(".welcome-curtain", { attr: { d: "M 100 0 H 100 V 100 H 100 Z" }, duration: 1.5, ease: "power2.inOut" })
+                    .to("#welcome-section .line-content", { y: "0%", stagger: 0.1, duration: 1.2, ease: "power3.out" }, "-=1")
+                    .to("#welcome-section .line-content", { y: "100%", stagger: 0.05, duration: 0.8, ease: "power3.in" }, "+=1.5")
+                    .to(".welcome-curtain", { attr: { d: "M 0 0 H 100 V 100 H 0 Z" }, duration: 1, ease: "power2.inOut" }, "-=0.5");
+            }
 
-            // Welcome Section Timeline (Desktop)
-            let tlSec2 = gsap.timeline({
-                scrollTrigger: {
-                    trigger: "#welcome-section",
-                    start: "top top",
-                    end: "+=150%",
-                    pin: true,
-                    scrub: 1,
-                    anticipatePin: 1
+            if (aboutSection) {
+                const sec3Title = document.querySelector(".about-title");
+                const sec3Desc = document.querySelector(".about-desc");
+                const sec3Subtitle = document.querySelector(".about-subtitle");
+                splitTextIntoLines(sec3Title);
+                splitTextIntoLines(sec3Desc);
+                splitTextIntoLines(sec3Subtitle);
+
+                let tlSec3 = gsap.timeline({
+                    scrollTrigger: {
+                        trigger: aboutSection,
+                        start: "top top",
+                        end: "+=150%",
+                        pin: true,
+                        scrub: 1,
+                        anticipatePin: 1
+                    }
+                });
+                
+                tlSec3
+                    .to([".about-curtain-1", ".about-curtain-2"], { attr: { d: "M 100 0 H 100 V 100 H 100 Z" }, duration: 1.5, ease: "power2.inOut" })
+                    .to("#about-section .line-content", { y: "0%", stagger: 0.08, duration: 1.2, ease: "power3.out" }, "-=1");
+
+                // AMAN DARI ERROR: Cek spesifik untuk class about-stats
+                const statsCards = document.querySelectorAll(".about-stats > div");
+                if (statsCards.length > 0) {
+                    tlSec3.from(statsCards, { opacity: 0, scale: 0.9, y: 20, stagger: 0.1, duration: 0.8, ease: "power2.out" }, "-=0.8")
+                          .to(statsCards, { opacity: 0, scale: 0.9, y: 20, stagger: 0.05, duration: 0.6, ease: "power2.in" }, "+=1.5");
                 }
-            });
-            tlSec2
-                // 1. Reveal Image (SVG curtain morphs to right side / zero width)
-                .to(".welcome-curtain", { attr: { d: "M 100 0 H 100 V 100 H 100 Z" }, duration: 1.5, ease: "power2.inOut" })
-                // 2. Reveal Text by lines
-                .to("#welcome-section .line-content", { y: "0%", stagger: 0.1, duration: 1.2, ease: "power3.out" }, "-=1")
-                // 3. Hide Text (starts 1.5s after text reveal finishes to hold the POV)
-                .to("#welcome-section .line-content", { y: "100%", stagger: 0.05, duration: 0.8, ease: "power3.in" }, "+=1.5")
-                // 4. Close Image Curtain (covers the image again)
-                .to(".welcome-curtain", { attr: { d: "M 0 0 H 100 V 100 H 0 Z" }, duration: 1, ease: "power2.inOut" }, "-=0.5");
 
-            // About Section Timeline (Desktop)
-            let tlSec3 = gsap.timeline({
-                scrollTrigger: {
-                    trigger: "#about-section",
-                    start: "top top",
-                    end: "+=150%",
-                    pin: true,
-                    scrub: 1,
-                    anticipatePin: 1
-                }
-            });
-            tlSec3
-                // 1. Reveal both image curtains
-                .to([".about-curtain-1", ".about-curtain-2"], { attr: { d: "M 100 0 H 100 V 100 H 100 Z" }, duration: 1.5, ease: "power2.inOut" })
-                // 2. Reveal Text by lines
-                .to("#about-section .line-content", { y: "0%", stagger: 0.08, duration: 1.2, ease: "power3.out" }, "-=1")
-                // 3. Reveal Stats cards
-                .from(".about-stats > div", { opacity: 0, scale: 0.9, y: 20, stagger: 0.1, duration: 0.8, ease: "power2.out" }, "-=0.8")
-                // 4. Hide Stats (starts 1.5s after stats reveal finishes to hold the POV)
-                .to(".about-stats > div", { opacity: 0, scale: 0.9, y: 20, stagger: 0.05, duration: 0.6, ease: "power2.in" }, "+=1.5")
-                // 5. Hide Text
-                .to("#about-section .line-content", { y: "100%", stagger: 0.05, duration: 0.8, ease: "power3.in" }, "-=0.4")
-                // 6. Close curtains
-                .to([".about-curtain-1", ".about-curtain-2"], { attr: { d: "M 0 0 H 100 V 100 H 0 Z" }, duration: 1, ease: "power2.inOut" }, "-=0.5");
+                tlSec3
+                    .to("#about-section .line-content", { y: "100%", stagger: 0.05, duration: 0.8, ease: "power3.in" }, "-=0.4")
+                    .to([".about-curtain-1", ".about-curtain-2"], { attr: { d: "M 0 0 H 100 V 100 H 0 Z" }, duration: 1, ease: "power2.inOut" }, "-=0.5");
+            }
         });
 
-        // Mobile Welcome & About (Simple scroll-triggered reveals, no layout distortion)
+        // Mobile Welcome & About
         mmWelcome.add("(max-width: 767px)", () => {
-            // Welcome Section (Mobile)
-            let tlSec2Mob = gsap.timeline({
-                scrollTrigger: {
-                    trigger: "#welcome-section",
-                    start: "top 75%",
-                    toggleActions: "play none none none"
-                }
-            });
-            tlSec2Mob
-                .to(".welcome-curtain", { attr: { d: "M 100 0 H 100 V 100 H 100 Z" }, duration: 1.2, ease: "power2.inOut" })
-                .from(".welcome-text-container", { opacity: 0, y: 30, duration: 1.0, ease: "power3.out" }, "-=0.8");
+            if (welcomeSection) {
+                let tlSec2Mob = gsap.timeline({
+                    scrollTrigger: {
+                        trigger: welcomeSection,
+                        start: "top 75%",
+                        toggleActions: "play none none none"
+                    }
+                });
+                tlSec2Mob
+                    .to(".welcome-curtain", { attr: { d: "M 100 0 H 100 V 100 H 100 Z" }, duration: 1.2, ease: "power2.inOut" })
+                    .from(".welcome-text-container", { opacity: 0, y: 30, duration: 1.0, ease: "power3.out" }, "-=0.8");
+            }
 
-            // About Section (Mobile)
-            let tlSec3Mob = gsap.timeline({
-                scrollTrigger: {
-                    trigger: "#about-section",
-                    start: "top 75%",
-                    toggleActions: "play none none none"
+            if (aboutSection) {
+                let tlSec3Mob = gsap.timeline({
+                    scrollTrigger: {
+                        trigger: aboutSection,
+                        start: "top 75%",
+                        toggleActions: "play none none none"
+                    }
+                });
+                tlSec3Mob
+                    .to([".about-curtain-1", ".about-curtain-2"], { attr: { d: "M 100 0 H 100 V 100 H 100 Z" }, duration: 1.2, ease: "power2.inOut" })
+                    .from(".about-text-container", { opacity: 0, y: 30, duration: 1.0, ease: "power3.out" }, "-=0.8");
+
+                // AMAN DARI ERROR
+                const statsCards = document.querySelectorAll(".about-stats > div");
+                if (statsCards.length > 0) {
+                    tlSec3Mob.from(statsCards, { opacity: 0, scale: 0.9, y: 15, stagger: 0.08, duration: 0.6, ease: "power2.out" }, "-=0.6");
                 }
-            });
-            tlSec3Mob
-                .to([".about-curtain-1", ".about-curtain-2"], { attr: { d: "M 100 0 H 100 V 100 H 100 Z" }, duration: 1.2, ease: "power2.inOut" })
-                .from(".about-text-container", { opacity: 0, y: 30, duration: 1.0, ease: "power3.out" }, "-=0.8")
-                .from(".about-stats > div", { opacity: 0, scale: 0.9, y: 15, stagger: 0.08, duration: 0.6, ease: "power2.out" }, "-=0.6");
+            }
         });
 
         // Bridge Card Fanning Animation
         let mm = gsap.matchMedia();
+        const destContainer = document.getElementById("destinasi-card-container");
+        
+        if (destContainer) {
+            // Desktop Layout
+            mm.add("(min-width: 768px)", () => {
+                gsap.timeline({
+                    scrollTrigger: {
+                        trigger: destContainer,
+                        start: "top 95%",
+                        end: "bottom 15%",
+                        scrub: 1.2,
+                    }
+                })
+                .fromTo(".destinasi-card", 
+                    { xPercent: -50, yPercent: -50, x: 0, y: 0, rotation: 0 },
+                    {
+                        xPercent: -50,
+                        yPercent: -50,
+                        x: (i) => (i - 2) * 160,
+                        y: (i) => Math.abs(i - 2) * 20,
+                        rotation: (i) => (i - 2) * 10,
+                        ease: "power2.out"
+                    }
+                );
+            });
 
-        // Desktop Layout
-        mm.add("(min-width: 768px)", () => {
-            gsap.timeline({
-                scrollTrigger: {
-                    trigger: "#destinasi-card-container",
-                    start: "top 95%",
-                    end: "bottom 15%",
-                    scrub: 1.2,
-                }
-            })
-            .fromTo(".destinasi-card", 
-                { xPercent: -50, yPercent: -50, x: 0, y: 0, rotation: 0 },
-                {
-                    xPercent: -50,
-                    yPercent: -50,
-                    x: (i) => (i - 2) * 160,
-                    y: (i) => Math.abs(i - 2) * 20,
-                    rotation: (i) => (i - 2) * 10,
-                    ease: "power2.out"
-                }
-            );
-        });
-
-        // Mobile Layout
-        mm.add("(max-width: 767px)", () => {
-            gsap.timeline({
-                scrollTrigger: {
-                    trigger: "#destinasi-card-container",
-                    start: "top 95%",
-                    end: "bottom 10%",
-                    scrub: 1.2,
-                }
-            })
-            .fromTo(".destinasi-card", 
-                { xPercent: -50, yPercent: -50, x: 0, y: 0, rotation: 0 },
-                {
-                    xPercent: -50,
-                    yPercent: -50,
-                    x: (i) => (i - 2) * 45,
-                    y: (i) => Math.abs(i - 2) * 8,
-                    rotation: (i) => (i - 2) * 6,
-                    ease: "power2.out"
-                }
-            );
-        });
+            // Mobile Layout
+            mm.add("(max-width: 767px)", () => {
+                gsap.timeline({
+                    scrollTrigger: {
+                        trigger: destContainer,
+                        start: "top 95%",
+                        end: "bottom 10%",
+                        scrub: 1.2,
+                    }
+                })
+                .fromTo(".destinasi-card", 
+                    { xPercent: -50, yPercent: -50, x: 0, y: 0, rotation: 0 },
+                    {
+                        xPercent: -50,
+                        yPercent: -50,
+                        x: (i) => (i - 2) * 45,
+                        y: (i) => Math.abs(i - 2) * 8,
+                        rotation: (i) => (i - 2) * 6,
+                        ease: "power2.out"
+                    }
+                );
+            });
+        }
 
         // Mencegah animasi macet di HP karena scroll yang terlalu cepat
         const observer = new IntersectionObserver((entries) => {
@@ -854,7 +1111,7 @@
             rootMargin: "0px 0px -20px 0px" 
         });
 
-        // Automatically add reveal-on-scroll class to components that don't have animations yet
+        // Automatically add reveal-on-scroll class
         const unanimatedElements = document.querySelectorAll(
             'section:not(#hero-section):not(#welcome-section):not(#about-section):not(#destinasi-card-container) > div:not(.reveal-on-scroll), ' +
             'section:not(#hero-section):not(#welcome-section):not(#about-section):not(#destinasi-card-container) .grid > div:not(.reveal-on-scroll), ' +
@@ -868,12 +1125,11 @@
         });
 
         document.querySelectorAll('.reveal-on-scroll').forEach((el) => {
-            // Animasi halus fade in up
             el.classList.add('opacity-0', 'translate-y-8', 'md:translate-y-12', 'transition-all', 'duration-[800ms]', 'md:duration-[1000ms]', 'ease-out');
             observer.observe(el);
         });
 
-        // Heading Titles scroll triggered entrance animation (initialized after pinning setup)
+        // Heading Titles scroll triggered entrance animation
         sectionTitles.forEach(title => {
             const chars = title.querySelectorAll(".split-char");
             if (chars.length > 0) {
@@ -914,7 +1170,7 @@
             }
         }
 
-        // Refresh ScrollTrigger to recalculate all trigger positions correctly
+        // Refresh ScrollTrigger
         ScrollTrigger.refresh();
     });
 </script>

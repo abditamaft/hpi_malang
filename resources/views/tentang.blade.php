@@ -329,6 +329,75 @@
                 @endforeach
             </div>
         </div>
+		<!-- ================= TAMBAHAN BARU: DEWAN PENASIHAT & DEWAN KODE ETIK ================= -->
+        @if($dewanPenasihat->isNotEmpty() || $dewanKodeEtik->isNotEmpty())
+        <div class="mt-16 md:mt-20">
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+
+                <!-- Dewan Penasihat -->
+                @if($dewanPenasihat->isNotEmpty())
+                <div class="bg-white border border-gray-100 rounded-3xl p-8 md:p-10 shadow-sm">
+                    <div class="flex items-center gap-3 mb-6">
+                        <span class="inline-flex items-center justify-center w-9 h-9 rounded-full bg-[#937538]/10 shrink-0">
+                            <svg class="w-5 h-5 text-[#937538]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        </span>
+                        <h4 class="text-sm font-bold text-[#937538] uppercase tracking-[0.15em]">
+                            {{ session('locale') == 'en' ? 'Advisory Board' : 'Dewan Penasihat' }}
+                        </h4>
+                    </div>
+
+                    <div class="space-y-4">
+                        @foreach($dewanPenasihat as $penasihat)
+                        <div class="flex items-center gap-4 group">
+                            @if($penasihat->foto)
+                                <img src="{{ asset('storage/' . $penasihat->foto) }}"
+                                     class="w-12 h-12 rounded-full object-cover border-2 border-white ring-2 ring-[#937538]/15 shadow-sm shrink-0">
+                            @else
+                                <div class="w-12 h-12 rounded-full bg-[#937538]/5 flex items-center justify-center border-2 border-white ring-2 ring-[#937538]/15 shadow-sm shrink-0">
+                                    <svg class="w-6 h-6 text-[#937538]/50" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                                </div>
+                            @endif
+                            <p class="text-sm font-bold text-gray-900">{{ $penasihat->nama }}</p>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+                @endif
+
+                <!-- Dewan Kode Etik -->
+                @if($dewanKodeEtik->isNotEmpty())
+                <div class="bg-white border border-gray-100 rounded-3xl p-8 md:p-10 shadow-sm">
+                    <div class="flex items-center gap-3 mb-6">
+                        <span class="inline-flex items-center justify-center w-9 h-9 rounded-full bg-[#005344]/10 shrink-0">
+                            <svg class="w-5 h-5 text-[#005344]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                        </span>
+                        <h4 class="text-sm font-bold text-[#005344] uppercase tracking-[0.15em]">
+                            {{ session('locale') == 'en' ? 'Ethics Board' : 'Dewan Kode Etik' }}
+                        </h4>
+                    </div>
+
+                    <div class="space-y-4">
+                        @foreach($dewanKodeEtik as $etik)
+                        <div class="flex items-center gap-4 group">
+                            @if($etik->foto)
+                                <img src="{{ asset('storage/' . $etik->foto) }}"
+                                     class="w-12 h-12 rounded-full object-cover border-2 border-white ring-2 ring-[#005344]/15 shadow-sm shrink-0">
+                            @else
+                                <div class="w-12 h-12 rounded-full bg-[#005344]/5 flex items-center justify-center border-2 border-white ring-2 ring-[#005344]/15 shadow-sm shrink-0">
+                                    <svg class="w-6 h-6 text-[#005344]/50" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                                </div>
+                            @endif
+                            <p class="text-sm font-bold text-gray-900">{{ $etik->nama }}</p>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+                @endif
+
+            </div>
+        </div>
+        @endif
     </div>
 </section>
 
