@@ -71,7 +71,7 @@
                 <a href="/direktori" class="w-full sm:w-auto bg-hpi-green text-white text-xs font-semibold px-6 py-3 rounded-lg hover:bg-teal-900 transition-colors shadow-sm text-center">
                     {{ $locale == 'id' ? 'Cari di Direktori' : 'Search Directory' }}
                 </a>
-                <a href="/hubungi-kami" class="w-full sm:w-auto border border-gray-300 text-hpi-green text-xs font-semibold px-6 py-3 rounded-lg hover:bg-gray-50 transition-colors text-center">
+                <a href="/tentang#about-section-4" class="w-full sm:w-auto border border-gray-300 text-hpi-green text-xs font-semibold px-6 py-3 rounded-lg hover:bg-gray-50 transition-colors text-center">
                     {{ $locale == 'id' ? 'Hubungi Kami' : 'Contact Us' }}
                 </a>
             </div>

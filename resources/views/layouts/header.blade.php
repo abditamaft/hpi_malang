@@ -117,7 +117,7 @@
                 <a href="{{ route('lang.switch', 'en') }}" class="px-3 py-1.5 rounded-full text-[11px] font-bold tracking-wider transition-all {{ $locale == 'en' ? 'bg-white shadow text-gray-800' : 'text-gray-500 hover:text-gray-700' }}">EN</a>
             </div>
 
-            <a href="/hubungi-kami" class="hidden md:block bg-hpi-green text-white px-6 py-2.5 rounded-full text-sm font-semibold hover:bg-emerald-900 transition-colors shadow-sm">
+            <a href="/tentang#about-section-4" class="hidden md:block bg-hpi-green text-white px-6 py-2.5 rounded-full text-sm font-semibold hover:bg-emerald-900 transition-colors shadow-sm">
                 {{ $locale == 'id' ? 'Hubungi Kami' : 'Contact Us' }}
             </a>
 
@@ -145,6 +145,6 @@
          <a href="/layanan" class="p-3 rounded-lg hover:bg-gray-50 font-medium {{ request()->is('layanan') ? 'text-hpi-green bg-gray-50' : 'text-gray-700' }}">{{ $locale == 'id' ? 'Layanan' : 'Services' }}</a>
          <a href="/direktori" class="p-3 rounded-lg hover:bg-gray-50 font-medium {{ request()->is('direktori') ? 'text-hpi-green bg-gray-50' : 'text-gray-700' }}">{{ $locale == 'id' ? 'Direktori' : 'Directory' }}</a>
          <a href="/berita" class="p-3 rounded-lg hover:bg-gray-50 font-medium {{ request()->is('berita') ? 'text-hpi-green bg-gray-50' : 'text-gray-700' }}">{{ $locale == 'id' ? 'Berita & Acara' : 'News & Events' }}</a>
-         <a href="/hubungi-kami" class="mt-4 p-3 rounded-lg bg-hpi-green text-white font-medium text-center">{{ $locale == 'id' ? 'Hubungi Kami' : 'Contact Us' }}</a>
+         <a href="/tentang#about-section-4" class="mt-4 p-3 rounded-lg bg-hpi-green text-white font-medium text-center">{{ $locale == 'id' ? 'Hubungi Kami' : 'Contact Us' }}</a>
     </div>
 </header>

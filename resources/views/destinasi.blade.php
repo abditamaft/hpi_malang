@@ -182,7 +182,7 @@
                         ? 'Maksimalkan pengalaman wisata Anda dengan pengetahuan mendalam dari anggota HPI Kabupaten Malang bersertifikat.'
                         : 'Maximize your travel experience with in-depth knowledge from certified HPI Malang Regency members.' }}
                 </p>
-                <a href="/hubungi-kami"
+                <a href="/direktori"
                    class="inline-flex items-center gap-2 bg-white text-hpi-green font-bold
                           hover:bg-gray-50 transition-colors shadow-lg hover:shadow-xl
                           hover:-translate-y-0.5 transform duration-200"
